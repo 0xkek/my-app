@@ -16,7 +16,7 @@ export default function Home() {
 
         {/* A paragraph describing the site */}
         <p className="mb-4">
-            This is where I'll share my thoughts and experiments with Solana smart contracts and blockchain technology.
+            This is where I&apos;ll share my thoughts and experiments with Solana smart contracts and blockchain technology.
         </p>
 
         {/* A subheading for a section */}

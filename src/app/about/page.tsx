@@ -12,7 +12,7 @@ export default function Home() {
   
           {/* Style the introductory paragraph */}
           <p className="text-lg text-slate-700 mb-4">
-              This is where I'll share my thoughts and experiments with Solana smart contracts and blockchain technology.
+              This is where I&apos;ll share my thoughts and experiments with Solana smart contracts and blockchain technology.
           </p>
   
           {/* Style the subheading */}
