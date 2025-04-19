@@ -1,39 +1,62 @@
-// src/app/page.tsx
-
-// No imports are needed for this basic version yet
-// (If you had 'import Image...' before and deleted the footer, you don't need it now)
+// src/app/page.tsx (Correct Styled Version)
+import Link from 'next/link'; // Make sure Link is imported
 
 export default function Home() {
   return (
-    // The <main> tag is the single top-level element being returned.
-    // The className adds some padding around the content.
-    <main className="p-8">
-
-        {/* Your main heading */}
-        <h1 className="text-3xl font-bold mb-4">
-            Welcome to my Solana Ideas Playground!
+    // Using fragment, assuming <main> is provided by layout adds container/padding
+    <>
+      {/* Hero Section */}
+      <section className="text-center py-16 px-4 mb-12 bg-gradient-to-b from-white to-slate-100 dark:from-slate-800 dark:to-slate-900 rounded-lg shadow-sm">
+        <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 dark:text-slate-100 mb-4">
+          Welcome to the Playground!
         </h1>
-
-        {/* A paragraph describing the site */}
-        <p className="mb-4">
-            This is where I&apos;ll share my thoughts and experiments with Solana smart contracts and blockchain technology.
+        <p className="text-lg sm:text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto mb-8">
+          Exploring Solana, smart contracts, and web3 ideas. This is a space for learning, building, and sharing thoughts on blockchain development.
         </p>
+        {/* Call-to-action Buttons/Links */}
+        <div className="flex flex-wrap justify-center gap-4">
+            <Link href="/blog" className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-5 rounded-md shadow transition-colors">
+                Read Thoughts
+            </Link>
+            <Link href="/projects" className="inline-block bg-slate-600 hover:bg-slate-700 text-white font-semibold py-2 px-5 rounded-md shadow transition-colors">
+                View Projects
+            </Link>
+        </div>
+      </section>
 
-        {/* A subheading for a section */}
-        <h2 className="text-2xl font-semibold mt-6 mb-2">
-            Latest Thoughts
-        </h2>
+      {/* Content Sections in a Grid */}
+      <section className="px-4">
+        {/* Grid: 1 column on small screens, 2 columns on medium screens and up */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 
-        {/* An example list */}
-        <ul>
-          <li className="mb-1">Idea 1: Exploring SPL Tokens</li>
-          <li className="mb-1">Idea 2: Building a simple voting dApp</li>
-          <li>Idea 3: Understanding transaction costs</li>
-        </ul>
+          {/* Latest Thoughts Card */}
+          <div className="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-md border border-slate-200 dark:border-slate-700 flex flex-col"> {/* CARD STYLES */}
+            <h2 className="text-2xl font-semibold text-slate-800 dark:text-slate-200 mb-3">
+              Latest Thoughts
+            </h2>
+            <p className="text-slate-600 dark:text-slate-400 mb-4 flex-grow">
+              Check out the blog for articles and ideas on Solana development, web3 concepts, and project updates.
+            </p>
+             <Link href="/blog" className="text-blue-600 dark:text-blue-400 hover:underline self-start">
+               Go to Blog &rarr;
+             </Link>
+          </div>
 
-        {/* You can add more content or sections below here later */}
+          {/* Projects Showcase Card */}
+          <div className="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-md border border-slate-200 dark:border-slate-700 flex flex-col"> {/* CARD STYLES */}
+            <h2 className="text-2xl font-semibold text-slate-800 dark:text-slate-200 mb-3">
+              Projects Showcase
+            </h2>
+             <p className="text-slate-600 dark:text-slate-400 mb-4 flex-grow">
+               Explore the protocols and experiments being built here. Dive into the code and concepts behind the projects.
+             </p>
+             <Link href="/projects" className="text-blue-600 dark:text-blue-400 hover:underline self-start">
+               View Projects &rarr;
+             </Link>
+          </div>
 
-    </main>
-    // Ensure there are no other tags like <div> outside and next to <main> here
+        </div>
+      </section>
+    </>
   );
 }

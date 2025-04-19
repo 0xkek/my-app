@@ -1,4 +1,4 @@
-// src/app/layout.tsx (Whitespace double-checked)
+// src/app/layout.tsx (Ensuring html and body tags are present)
 
 import Link from 'next/link';
 import type { Metadata } from "next";
@@ -9,8 +9,8 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "My Solana Playground", // Customize your site title
-  description: "Exploring Solana ideas and projects", // Customize your site description
+  title: "Smoothbrain XYZ Playground", // Updated Title
+  description: "Exploring Solana ideas and projects",
 };
 
 export default function RootLayout({
@@ -18,36 +18,42 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const currentYear = new Date().getFullYear(); // Get current year dynamically
+  const currentYear = new Date().getFullYear();
 
   return (
-    // Ensure html tag takes full height
+    // --- Root HTML tag MUST be here ---
     <html lang="en" className="h-full">
-      {/*
-        The body tag below should start immediately after the html tag above (or comments).
-        Ensure there are NO extra spaces or blank lines here that could cause hydration errors.
-      */}
+      {/* --- Body tag MUST be here, wrapping content --- */}
       <body className={`${inter.className} flex flex-col min-h-screen`}>
+
         {/* Header Navigation */}
-        <header className="bg-slate-700 text-white p-4 shadow-md">
-          <nav className="container mx-auto flex flex-wrap gap-x-6 gap-y-2">
-            <Link href="/" className="hover:text-slate-300">Home</Link>
-            <Link href="/about" className="hover:text-slate-300">About</Link>
-            <Link href="/blog" className="hover:text-slate-300">Blog</Link>
-            <Link href="/projects" className="hover:text-slate-300">Projects</Link>
-          </nav>
+        <header className="bg-slate-800 text-white shadow-md sticky top-0 z-10">
+          <div className="container mx-auto flex flex-wrap items-center justify-between p-4">
+            <Link href="/" className="text-xl font-bold hover:text-slate-300 transition-colors">
+              smoothbrain.xyz
+            </Link>
+            <nav className="flex flex-wrap gap-x-4 sm:gap-x-6 gap-y-1 items-center">
+              <Link href="/" className="hover:text-slate-300 transition-colors text-sm sm:text-base">Home</Link>
+              <Link href="/about" className="hover:text-slate-300 transition-colors text-sm sm:text-base">About</Link>
+              <Link href="/blog" className="hover:text-slate-300 transition-colors text-sm sm:text-base">Blog</Link>
+              <Link href="/projects" className="hover:text-slate-300 transition-colors text-sm sm:text-base">Projects</Link>
+            </nav>
+          </div>
         </header>
 
-        {/* Main page content - flex-grow makes it fill space */}
+        {/* Main page content */}
         <main className="container mx-auto p-4 flex-grow">
-          {children}
+          {children} {/* This renders your page.tsx content */}
         </main>
 
-        {/* Footer - mt-auto pushes it down */}
+        {/* Footer */}
         <footer className="w-full mt-auto py-4 text-center text-sm text-slate-500 border-t border-slate-200 bg-slate-50">
           © {currentYear} smoothbrain.xyz | Made with Next.js
         </footer>
+
       </body>
+      {/* --- Closing Body tag --- */}
     </html>
+    // --- Closing HTML tag ---
   );
 }
