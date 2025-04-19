@@ -1,78 +1,80 @@
-// src/app/blog/[slug]/page.tsx
+// src/app/blog/[slug]/page.tsx (Styled Post Page)
 
-// Corrected import path
+// Ensure correct import path for your structure
 import { getPostData, getAllPostIds } from '../../../../lib/posts';
-import { notFound } from 'next/navigation'; // Import notFound for handling errors
-import type { Metadata } from 'next'; // For setting page title
-import Link from 'next/link'; // Import Link for back navigation
+import { notFound } from 'next/navigation';
+import type { Metadata } from 'next';
+import Link from 'next/link'; // For 'Back' link
 
-// Define props type, including the 'slug' param from the folder name '[slug]'
 type Props = {
-  params: {
-    slug: string; // This 'slug' matches the folder name '[slug]'
-  };
+  params: { slug: string };
 };
 
-// --- Optional but recommended: generateStaticParams ---
-// This tells Next.js ahead of time which slugs exist, improving performance
-// If you skip this, pages will be generated on demand the first time they are visited
+// Optional: generateStaticParams (Recommended for blogs)
 export async function generateStaticParams() {
   const paths = getAllPostIds();
-  // The paths should look like: [ { params: { slug: 'post-1' } }, { params: { slug: 'post-2' } } ]
-  // We just need the slug values: [ { slug: 'post-1' }, { slug: 'post-2' } ]
+  // Ensure the returned format matches what Next.js expects for App Router
   return paths.map(path => ({
     slug: path.params.slug,
   }));
 }
 
-// Optional: Function to generate metadata (like page title) dynamically
+// Optional: Generate dynamic metadata
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   try {
     const postData = await getPostData(params.slug);
     return {
-      title: postData.title, // Set browser tab title to post title
-      description: postData.excerpt || 'A blog post.', // Use excerpt for meta description
+      title: postData.title,
+      description: postData.excerpt || `Read the post: ${postData.title}`,
     };
   } catch (error) {
-    return {
-      title: 'Post Not Found',
-    };
+    return { title: 'Post Not Found' };
   }
 }
 
 
-// The main page component - needs to be async to fetch data
+// The main page component
 export default async function PostPage({ params }: Props) {
-  const postId = params.slug; // Get the slug (e.g., 'first-markdown-post') from the URL
+  const postId = params.slug;
 
   try {
-    // Fetch the specific post data, including HTML content, based on the slug
     const postData = await getPostData(postId);
 
-    // Render the post
     return (
-      <div> {/* Added a wrapper div */}
-        {/* Back link */}
-        <Link href="/blog" className="text-blue-600 hover:underline mb-6 inline-block">
-          &larr; Back to Blog List
+      // Add overall vertical padding
+      <div className="py-8 md:py-12">
+
+        {/* Back link - styled with hover effect */}
+        <Link href="/blog"
+              className="inline-flex items-center gap-1 text-sm text-blue-600 dark:text-blue-400 hover:underline group mb-8">
+           <span aria-hidden="true" className="transition-transform group-hover:-translate-x-1">&larr;</span> Back to Blog List
         </Link>
 
-        <article className="prose lg:prose-xl max-w-none dark:prose-invert">
-          {/* Post Title */}
-          <h1 className="mb-2">{postData.title}</h1>
-          {/* Post Date & Author */}
-          <div className="text-sm text-gray-500 dark:text-gray-400 mt-0 mb-8">
-            Published on {postData.date}
-            {postData.author && ` by ${postData.author}`} {/* Conditionally show author */}
+        {/* Centered content column with max width for readability */}
+        <div className="max-w-3xl mx-auto"> {/* Adjust max-w- class as needed */}
+
+          {/* Post Header section */}
+          <div className="mb-8 border-b border-slate-200 dark:border-slate-700 pb-6">
+             {/* Use ! prefix to ensure Tailwind overrides default prose styles for heading */}
+            <h1 className="!text-3xl sm:!text-4xl lg:!text-5xl font-bold text-slate-900 dark:text-slate-100 mb-3">
+              {postData.title}
+            </h1>
+            <p className="text-base text-slate-500 dark:text-slate-400">
+              Published on {postData.date}
+              {postData.author && <span className="italic"> by {postData.author}</span>}
+            </p>
           </div>
 
-          {/* Post Content (rendered from HTML string) */}
-          <div dangerouslySetInnerHTML={{ __html: postData.contentHtml }} />
-        </article>
+          {/* Article content styled by prose */}
+          {/* Added max-w-none to prose so parent div controls width */}
+          <article className="prose lg:prose-xl dark:prose-invert max-w-none"
+                   dangerouslySetInnerHTML={{ __html: postData.contentHtml }} />
+
+        </div>
       </div>
     );
   } catch (error) {
-    // If getPostData fails (e.g., file not found for the slug), show Next.js 404 page
+    // If post not found, show 404
     console.error(`Error fetching post data for slug "${postId}":`, error);
     notFound();
   }
