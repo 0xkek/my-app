@@ -1,13 +1,21 @@
-// src/app/components/SiteHeader.tsx
-'use client'; // Mark this component as a Client Component
+// src/components/SiteHeader.tsx (Using dynamic import for wallet button)
+'use client';
 
 import Link from 'next/link';
-// Import the pre-built wallet button component
-import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
+// Import dynamic from next/dynamic
+import dynamic from 'next/dynamic';
+import React from 'react';
 
-// --- Make sure 'export' is here ---
+// Dynamically import WalletMultiButton with SSR disabled
+// This ensures it only renders on the client side
+const WalletMultiButtonDynamic = dynamic(
+    async () => (await import('@solana/wallet-adapter-react-ui')).WalletMultiButton,
+    { ssr: false } // Disable server-side rendering
+);
+
 export function SiteHeader() {
-// ----------------------------------
+  // No need for useWallet or truncateAddress here anymore
+
   return (
     <header className="bg-slate-800 text-white shadow-md sticky top-0 z-10">
       <div className="container mx-auto flex flex-wrap items-center justify-between p-4 gap-y-2">
@@ -27,9 +35,10 @@ export function SiteHeader() {
             <Link href="/projects" className="hover:text-slate-300 transition-colors text-sm sm:text-base">Projects</Link>
           </nav>
 
-          {/* Wallet Connect Button */}
+          {/* Wallet Button Area */}
           <div>
-            <WalletMultiButton style={{ height: '38px', fontSize: '14px', backgroundColor: '#5850ec' }} />
+            {/* Use the dynamically imported button */}
+            <WalletMultiButtonDynamic style={{ height: '38px', fontSize: '14px', backgroundColor: '#5850ec' }} />
           </div>
         </div>
 
