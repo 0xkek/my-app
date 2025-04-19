@@ -1,11 +1,11 @@
-// src/app/layout.tsx
+// src/app/layout.tsx (Whitespace double-checked)
 
-import Link from 'next/link'; // Import the Link component
+import Link from 'next/link';
 import type { Metadata } from "next";
-import { Inter } from "next/font/google"; // Or your chosen font import
+// Make sure this font import matches your project setup (e.g., Inter, Geist Sans)
+import { Inter } from "next/font/google";
 import "./globals.css";
 
-// Ensure your font setup here matches your project (Inter, Geist Sans, etc.)
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -18,40 +18,36 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // Ensure 'return' is followed immediately by '(' if JSX spans multiple lines
-  return (
-    <html lang="en">
-      {/* Apply font class to body or html tag as needed */}
-      <body className={inter.className}>
+  const currentYear = new Date().getFullYear(); // Get current year dynamically
 
-        {/* START: Header Navigation */}
+  return (
+    // Ensure html tag takes full height
+    <html lang="en" className="h-full">
+      {/*
+        The body tag below should start immediately after the html tag above (or comments).
+        Ensure there are NO extra spaces or blank lines here that could cause hydration errors.
+      */}
+      <body className={`${inter.className} flex flex-col min-h-screen`}>
+        {/* Header Navigation */}
         <header className="bg-slate-700 text-white p-4 shadow-md">
-          <nav className="container mx-auto flex flex-wrap gap-x-6 gap-y-2"> {/* Added flex-wrap and gap-y for responsiveness */}
-            <Link href="/" className="hover:text-slate-300">
-              Home
-            </Link>
-            <Link href="/about" className="hover:text-slate-300">
-              About
-            </Link>
-            <Link href="/blog" className="hover:text-slate-300">
-              Blog
-            </Link>
-            <Link href="/projects" className="hover:text-slate-300">
-              Projects
-            </Link>
+          <nav className="container mx-auto flex flex-wrap gap-x-6 gap-y-2">
+            <Link href="/" className="hover:text-slate-300">Home</Link>
+            <Link href="/about" className="hover:text-slate-300">About</Link>
+            <Link href="/blog" className="hover:text-slate-300">Blog</Link>
+            <Link href="/projects" className="hover:text-slate-300">Projects</Link>
           </nav>
         </header>
-        {/* END: Header Navigation */}
 
-        {/* Main page content renders here */}
-        <main className="container mx-auto p-4">
+        {/* Main page content - flex-grow makes it fill space */}
+        <main className="container mx-auto p-4 flex-grow">
           {children}
         </main>
 
-        {/* Optional Footer */}
-        {/* <footer className="text-center mt-8 p-4 text-gray-500 border-t">Site Footer Content</footer> */}
-
+        {/* Footer - mt-auto pushes it down */}
+        <footer className="w-full mt-auto py-4 text-center text-sm text-slate-500 border-t border-slate-200 bg-slate-50">
+          © {currentYear} smoothbrain.xyz | Made with Next.js
+        </footer>
       </body>
     </html>
-  ); // Ensure this closing parenthesis and potential semicolon are correct
+  );
 }
