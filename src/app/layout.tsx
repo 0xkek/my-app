@@ -5,11 +5,12 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google"; // Or your chosen font import
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] }); // Or your chosen font setup
+// Ensure your font setup here matches your project (Inter, Geist Sans, etc.)
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "My Solana Playground", // You can change the default title here
-  description: "Exploring Solana ideas", // And the description
+  title: "My Solana Playground", // Customize your site title
+  description: "Exploring Solana ideas and projects", // Customize your site description
 };
 
 export default function RootLayout({
@@ -17,39 +18,40 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Ensure 'return' is followed immediately by '(' if JSX spans multiple lines
   return (
     <html lang="en">
-      {/* Ensure font class is applied correctly */}
+      {/* Apply font class to body or html tag as needed */}
       <body className={inter.className}>
 
-        {/* START: Simple Header Navigation */}
-        <header className="bg-slate-700 text-white p-4 shadow-md"> {/* Basic Styling */}
-          <nav className="container mx-auto flex gap-6"> {/* Adjust spacing with gap-x */}
+        {/* START: Header Navigation */}
+        <header className="bg-slate-700 text-white p-4 shadow-md">
+          <nav className="container mx-auto flex flex-wrap gap-x-6 gap-y-2"> {/* Added flex-wrap and gap-y for responsiveness */}
             <Link href="/" className="hover:text-slate-300">
               Home
             </Link>
             <Link href="/about" className="hover:text-slate-300">
               About
             </Link>
-            {/* --- Blog link added here --- */}
             <Link href="/blog" className="hover:text-slate-300">
               Blog
             </Link>
-            {/* -------------------------- */}
-            {/* We can add a link to a 'Projects' page here later */}
+            <Link href="/projects" className="hover:text-slate-300">
+              Projects
+            </Link>
           </nav>
         </header>
-        {/* END: Simple Header Navigation */}
+        {/* END: Header Navigation */}
 
-        {/* The main content of your current page renders here */}
-        <main className="container mx-auto p-4"> {/* Padding/centering for page content */}
+        {/* Main page content renders here */}
+        <main className="container mx-auto p-4">
           {children}
         </main>
 
-        {/* Optional Footer can go here */}
-        {/* <footer className="text-center mt-8 p-4 text-gray-500 border-t">Site Footer</footer> */}
+        {/* Optional Footer */}
+        {/* <footer className="text-center mt-8 p-4 text-gray-500 border-t">Site Footer Content</footer> */}
 
       </body>
     </html>
-  );
+  ); // Ensure this closing parenthesis and potential semicolon are correct
 }
