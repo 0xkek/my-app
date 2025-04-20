@@ -1,14 +1,10 @@
-// src/components/SiteHeader.tsx (Adding Active Link Styling)
+// src/components/SiteHeader.tsx (Setting nav link size to text-2xl)
 'use client';
 
 import Link from 'next/link';
-import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
-import React from 'react';
-// --- Import usePathname ---
-import { usePathname } from 'next/navigation';
-// --------------------------
-// Import dynamic for WalletMultiButton (already done previously)
 import dynamic from 'next/dynamic';
+import React from 'react';
+import { usePathname } from 'next/navigation'; // Ensure usePathname is imported
 
 const WalletMultiButtonDynamic = dynamic(
     async () => (await import('@solana/wallet-adapter-react-ui')).WalletMultiButton,
@@ -16,15 +12,13 @@ const WalletMultiButtonDynamic = dynamic(
 );
 
 export function SiteHeader() {
-  // --- Get the current URL path ---
   const pathname = usePathname();
-  // --------------------------------
 
-  // Helper function to determine base class names
-  const baseLinkClass = "transition-colors text-sm sm:text-base";
+  // Helper function to determine base class names (adjust base size here if needed)
+  const baseLinkClass = "transition-colors"; // Removed specific size from base
+
   // Helper function to determine active/inactive class names
   const getLinkClass = (path: string) => {
-    // Check for exact match or if it's a parent route (e.g., /blog should be active for /blog/post-1)
     const isActive = (path === '/' && pathname === path) || (path !== '/' && pathname.startsWith(path));
     return isActive
       ? 'text-white font-semibold' // Active state style
@@ -44,19 +38,20 @@ export function SiteHeader() {
         <div className="flex items-center gap-x-4 sm:gap-x-6">
           {/* Navigation Links */}
           <nav className="flex flex-wrap gap-x-4 sm:gap-x-6 gap-y-1 items-center">
-            {/* Apply dynamic classes to each Link */}
-            <Link href="/" className={`${baseLinkClass} ${getLinkClass('/')}`}>
+             {/* --- Updated className for each link: text-2xl --- */}
+            <Link href="/" className={`${baseLinkClass} text-2xl ${getLinkClass('/')}`}>
               Home
             </Link>
-            <Link href="/about" className={`${baseLinkClass} ${getLinkClass('/about')}`}>
+            <Link href="/about" className={`${baseLinkClass} text-2xl ${getLinkClass('/about')}`}>
               About
             </Link>
-            <Link href="/blog" className={`${baseLinkClass} ${getLinkClass('/blog')}`}>
+            <Link href="/blog" className={`${baseLinkClass} text-2xl ${getLinkClass('/blog')}`}>
               Blog
             </Link>
-            <Link href="/projects" className={`${baseLinkClass} ${getLinkClass('/projects')}`}>
+            <Link href="/projects" className={`${baseLinkClass} text-2xl ${getLinkClass('/projects')}`}>
               Projects
             </Link>
+             {/* ------------------------------------------ */}
           </nav>
 
           {/* Wallet Button Area */}

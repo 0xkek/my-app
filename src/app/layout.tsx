@@ -1,14 +1,16 @@
-// src/app/layout.tsx (Moving Providers wrapper higher)
+// src/app/layout.tsx (Corrected Providers location AND text-lg)
 
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+// Use the Outfit font import
+import { Outfit } from "next/font/google";
+// Import the global styles
 import "./globals.css";
 // Import the Wallet Providers component
 import { Providers } from './providers';
-// Import the SiteHeader component (path should be correct now)
+// Import the SiteHeader component (using correct path for your structure)
 import { SiteHeader } from './components/SiteHeader';
 
-const inter = Inter({ subsets: ["latin"] });
+const outfit = Outfit({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Smoothbrain XYZ Playground",
@@ -24,22 +26,25 @@ export default function RootLayout({
 
   return (
     <html lang="en" className="h-full">
-      <body className={`${inter.className} flex flex-col min-h-screen`}>
-        {/* Providers now wraps Header, Main, and Footer */}
-        <Providers>
-          {/* SiteHeader is now INSIDE Providers */}
-          <SiteHeader />
+      {/* Apply font, base text color, AND base text size */}
+      <body className={`${outfit.className} flex flex-col min-h-screen text-slate-900 dark:text-slate-200 text-lg`}>
 
-          {/* Main page content */}
+        {/* Providers MUST wrap components needing wallet context (Header, Children) */}
+        <Providers> {/* <--- CORRECT location for Providers START */}
+
+          <SiteHeader /> {/* Header is now INSIDE Providers */}
+
           <main className="container mx-auto p-4 flex-grow">
             {children} {/* Children are also inside Providers */}
           </main>
 
-          {/* Footer is also technically inside Providers now */}
-          <footer className="w-full mt-auto py-4 text-center text-sm text-slate-500 border-t border-slate-200 bg-slate-50">
+          <footer className="w-full mt-auto py-4 text-center text-sm text-slate-500 dark:text-slate-400 border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900">
+             {/* Footer is also inside Providers (this is fine) */}
             © {currentYear} smoothbrain.xyz | Made with Next.js
           </footer>
-        </Providers> {/* Closing Providers tag */}
+
+        </Providers> {/* <--- CORRECT location for Providers END */}
+
       </body>
     </html>
   );
