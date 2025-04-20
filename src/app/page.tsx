@@ -1,5 +1,10 @@
-// src/app/page.tsx (Correct Styled Version)
-import Link from 'next/link'; // Make sure Link is imported
+// src/app/page.tsx (Including WalletStatus Component)
+
+import Link from 'next/link';
+// --- Import the new WalletStatus component ---
+// Using ./components because your components folder is inside app
+import { WalletStatus } from './components/WalletStatus';
+// -----------------------------------------
 
 export default function Home() {
   return (
@@ -13,8 +18,17 @@ export default function Home() {
         <p className="text-lg sm:text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto mb-8">
           Exploring Solana, smart contracts, and web3 ideas. This is a space for learning, building, and sharing thoughts on blockchain development.
         </p>
+
+        {/* --- Wallet Status Display Area --- */}
+        {/* Added a container to control width, centered */}
+        <div className="max-w-md mx-auto mb-8">
+            <WalletStatus /> {/* Use the WalletStatus component here */}
+        </div>
+        {/* -------------------------------- */}
+
         {/* Call-to-action Buttons/Links */}
-        <div className="flex flex-wrap justify-center gap-4">
+        {/* Added mt-0 to this div as WalletStatus now provides space above */}
+        <div className="flex flex-wrap justify-center gap-4 mt-0">
             <Link href="/blog" className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-5 rounded-md shadow transition-colors">
                 Read Thoughts
             </Link>
@@ -30,7 +44,7 @@ export default function Home() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 
           {/* Latest Thoughts Card */}
-          <div className="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-md border border-slate-200 dark:border-slate-700 flex flex-col"> {/* CARD STYLES */}
+          <div className="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-md border border-slate-200 dark:border-slate-700 flex flex-col">
             <h2 className="text-2xl font-semibold text-slate-800 dark:text-slate-200 mb-3">
               Latest Thoughts
             </h2>
@@ -43,7 +57,7 @@ export default function Home() {
           </div>
 
           {/* Projects Showcase Card */}
-          <div className="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-md border border-slate-200 dark:border-slate-700 flex flex-col"> {/* CARD STYLES */}
+          <div className="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-md border border-slate-200 dark:border-slate-700 flex flex-col">
             <h2 className="text-2xl font-semibold text-slate-800 dark:text-slate-200 mb-3">
               Projects Showcase
             </h2>
