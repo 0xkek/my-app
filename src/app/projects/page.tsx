@@ -1,33 +1,39 @@
-// src/app/projects/page.tsx (Syntax double-checked)
+// src/app/projects/page.tsx (Updated project list)
 import Link from 'next/link'; // Ensure Link is imported
 
 export default function ProjectsPage() {
-  // Placeholder data - replace with real project info later
+  // Updated projects array: First item replaced, others kept as placeholders
   const projects = [
+    // --- START: Replaced First Project ---
     {
-      id: 'spl-token-study',
+      id: 'wallet-comments', // Unique ID for this project
+      title: 'Wallet-Based Comments', // Title for the card
+      description: 'Exploring a comment system using Solana wallet signatures for identity instead of traditional logins.', // Description
+      tags: ['Identity', 'Comments', 'Web3', 'Next'], // Relevant tags
+      href: '/blog/wallet-as-identity-idea' // Link to the blog post explaining it
+    },
+    // --- END: Replaced First Project ---
+
+    // --- Kept other placeholders (you can update these later) ---
+    {
+      id: 'spl-token-study', // Keeping ID from previous placeholder example
       title: 'SPL Token Experiments',
       description: 'Exploring creation and management of SPL tokens on Solana network.',
-      tags: ['Tokens', 'SPL', 'Learning']
+      tags: ['Tokens', 'SPL', 'Learning'],
+      href: '#' // Placeholder link
     },
     {
-      id: 'onchain-voting',
-      title: 'Simple On-Chain Voting dApp',
-      description: 'A basic on-chain voting system concept using simple program logic.',
-      tags: ['dApp', 'Concept', 'Governance']
-    },
-    {
-      id: 'anchor-basics',
+      id: 'anchor-basics', // Keeping ID from previous placeholder example
       title: 'Anchor Framework Introduction',
       description: 'Learning the fundamentals of building Solana programs with Anchor.',
-      tags: ['Anchor', 'Rust', 'Development']
+      tags: ['Anchor', 'Rust', 'Development'],
+      href: '#' // Placeholder link
     },
+    // Add more actual or placeholder projects here if you like
   ];
 
-  // --- Ensure 'return' is followed by '(' ---
   return (
-    // --- Ensure '<div...' starts immediately after '(' ---
-    <div className="py-8 md:py-12">
+    <div className="py-8 md:py-12"> {/* Vertical padding */}
       {/* Page Title and Description */}
       <h1 className="text-4xl font-bold text-slate-800 dark:text-slate-100 mb-4 text-center">
         Projects & Protocols
@@ -37,6 +43,7 @@ export default function ProjectsPage() {
       </p>
 
       {/* Grid Container for Project Cards */}
+      {/* Adjust columns: 1 on small, 2 on medium, 3 on large screens */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
 
         {/* Map over the projects array to create a card for each */}
@@ -56,26 +63,29 @@ export default function ProjectsPage() {
                 {project.description}
               </p>
               {/* Display Tags */}
-              <div className="flex flex-wrap gap-2 mb-4">
-                {project.tags.map(tag => (
-                  <span key={tag} className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 text-xs font-semibold px-2 py-0.5 rounded">
-                    {tag}
-                  </span>
-                ))}
-              </div>
+              {project.tags && project.tags.length > 0 && ( // Check if tags exist
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {project.tags.map(tag => (
+                    <span key={tag} className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 text-xs font-semibold px-2 py-0.5 rounded">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
 
-            {/* Card Footer Area */}
+            {/* Card Footer Area (Button) */}
             <div className="border-t border-slate-200 dark:border-slate-700 px-6 py-4 bg-slate-50 dark:bg-slate-800/50 rounded-b-lg">
-               <Link href={`/projects/${project.id}`} /* Link will 404 for now */
+               {/* Use project.href for the link destination */}
+               <Link href={project.href || '#'} /* Default to '#' if no href */
                      className="inline-block bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold py-2 px-4 rounded shadow-sm transition-colors">
-                 Details &rarr;
+                 {project.href === '#' || !project.href ? 'Coming Soon' : (project.href.startsWith('/blog/') ? 'Read Post' : 'Details')} &rarr;
                </Link>
             </div>
           </div>
         ))}
 
-        {/* Message if no projects listed */}
+        {/* Message if no projects are listed */}
         {projects.length === 0 && (
            <p className="italic text-slate-500 md:col-span-2 lg:col-span-3 text-center">
              No projects listed yet. Check back soon!
@@ -84,7 +94,5 @@ export default function ProjectsPage() {
 
       </div>
     </div>
-    // --- Ensure ')' and optional ';' are correct here ---
   );
-  // --- Ensure '}' closes the function correctly ---
 }
