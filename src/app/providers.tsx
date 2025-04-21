@@ -1,4 +1,4 @@
-// src/app/providers.tsx (Restore Solflare, autoConnect=false)
+// src/app/providers.tsx (Restoring Solflare, autoConnect=false - From response #239)
 'use client';
 
 import React, { useMemo } from 'react';
@@ -9,21 +9,24 @@ import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
 import { PhantomWalletAdapter, SolflareWalletAdapter } from '@solana/wallet-adapter-wallets';
 import { clusterApiUrl } from '@solana/web3.js';
 
+// Make sure styles are imported
 import '@solana/wallet-adapter-react-ui/styles.css';
 
 export function Providers({ children }: { children: React.ReactNode }) {
+  // Set network to Devnet
   const network = WalletAdapterNetwork.Devnet;
+  // Derive endpoint based on network
   const endpoint = useMemo(() => clusterApiUrl(network), [network]);
 
-  // --- Restore both wallets ---
+  // --- Restore both wallets in the list ---
   const wallets = useMemo(
     () => [
         new PhantomWalletAdapter(),
         new SolflareWalletAdapter({ network }), // Added back Solflare
     ],
-    [network] // Added back network dependency
+    [network] // Network dependency needed for Solflare adapter config
   );
-  // -----------------------------
+  // ---------------------------------------
 
   return (
     <ConnectionProvider endpoint={endpoint}>
