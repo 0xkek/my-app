@@ -1,4 +1,4 @@
-// lib/posts.ts (Cleaned up - Final Version for now)
+// lib/posts.ts (From user input - verified as correct)
 import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
@@ -40,8 +40,17 @@ export function getSortedPostsData(): PostListData[] {
           id,
           ...(matterResult.data as PostFrontmatter),
         };
+        // Add basic validation or defaults for required fields
+         if (!postData.title || !postData.date) {
+           console.warn(`Post "${fileName}" is missing title or date in frontmatter.`);
+           // Provide default values or filter it out
+           // return null; // Example: Filter out posts with missing required frontmatter
+         }
         return postData;
     });
+      // Filter out any potential nulls if you added filtering above
+      // .filter(postData => postData !== null);
+
     return allPostsData.sort((a, b) => {
       const dateA = a.date || '1970-01-01';
       const dateB = b.date || '1970-01-01';
@@ -58,7 +67,7 @@ export function getSortedPostsData(): PostListData[] {
 export async function getPostData(id: string): Promise<PostFullData> {
   const fullPath = path.join(postsDirectory, `${id}.md`);
   if (!fs.existsSync(fullPath)) {
-     throw new Error(`Post file not found for id: ${id}`);
+       throw new Error(`Post file not found for id: ${id}`);
   }
   const fileContents = fs.readFileSync(fullPath, 'utf8');
   const matterResult = matter(fileContents);
@@ -71,6 +80,12 @@ export async function getPostData(id: string): Promise<PostFullData> {
     contentHtml,
     ...(matterResult.data as PostFrontmatter),
   };
+   // Add validation for required fields if needed
+   if (!postData.title || !postData.date) {
+       console.warn(`Post "${id}.md" is missing title or date in frontmatter.`);
+       // Handle appropriately, maybe throw error or return default?
+       // For now, just proceed
+   }
   return postData;
 }
 
