@@ -1,45 +1,49 @@
-// src/app/about/page.tsx (Styled with two-column layout)
+// src/app/about/page.tsx (Corrected Image Details)
 import Image from 'next/image';
 
 export default function AboutPage() {
   return (
-    // Add some vertical padding to the page overall
     <div className="py-8 md:py-12">
-
-      {/* Page Title */}
       <h1 className="text-4xl font-bold text-slate-800 dark:text-slate-100 mb-8 text-center md:mb-12">
-        About This Site
+        About This Playground
       </h1>
 
-      {/* Grid Container: 1 column default, 2 columns on medium screens (md:) and up */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
 
         {/* Column 1: Image */}
-        <div className="flex justify-center md:justify-start"> {/* Center on small, start on medium */}
-          {/* --- Make sure to use your actual image details below --- */}
+        <div className="flex justify-center md:justify-start">
+          {/* --- Corrected Image Details --- */}
           <Image
-            src="/smoovbrain logo.png" // <-- IMPORTANT: Replace with YOUR image path from /public
-            alt="A descriptive alt text for your image" // <-- IMPORTANT: Add good alt text
-            width={300}           // <-- IMPORTANT: Adjust to your image width
-            height={300}          // <-- IMPORTANT: Adjust to your image height
-            className="rounded-lg shadow-lg object-cover max-w-full h-auto" // Style image: rounded, shadow, cover ensures aspect ratio
-            priority={true}       // Add priority=true if image is visible above the fold on load
+            src="/smoovbrain-logo.png" // Correct filename
+            alt="Smoothbrain Logo"    // Updated Alt Text (Adjust if needed)
+            width={300}               // Desired width
+            height={300}              // Desired height
+            className="rounded-lg shadow-lg object-cover max-w-full h-auto"
+            priority={true}
           />
+          {/* ------------------------------- */}
         </div>
 
         {/* Column 2: Text Content */}
-        {/* Added text size, color, and spacing between paragraphs */}
-        <div className="text-lg text-slate-700 dark:text-slate-300 space-y-5 leading-relaxed">
-          <p>
-            Welcome to the playground! This site serves as a personal space to document my journey exploring Solana development, web3 concepts, and smart contract protocols.
+        <div className="bg-white dark:bg-slate-800 p-6 md:p-8 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700">
+          <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-3">
+            Purpose
+          </h2>
+          <p className="text-lg text-slate-700 dark:text-slate-300 mb-6 leading-relaxed">
+            Welcome! This site serves as my personal digital playground and notebook for exploring the world of Solana development, web3 concepts, and blockchain technology in general.
           </p>
-          <p>
-            Here, I'll share code experiments, thoughts on the ecosystem, and walkthroughs of projects I'm building. Consider it a learning lab and a place to tinker with blockchain technology.
+          <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-3">
+            What You'll Find
+          </h2>
+          <p className="text-lg text-slate-700 dark:text-slate-300 mb-6 leading-relaxed">
+            Here, I plan to document experiments, share thoughts on the ecosystem (like the blog posts on NFT and betting ideas!), and potentially showcase small projects or protocol interactions I build. Think of it as learning in public.
           </p>
-          <p>
-            Feel free to look around, and maybe you'll find something interesting or useful for your own web3 adventures. The goal is learning and sharing in the open.
+          <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-3">
+            The Goal
+          </h2>
+          <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
+            The main goal is simply to learn, tinker, and share. If you find something interesting or it sparks an idea for you, that's fantastic!
           </p>
-          {/* Add more paragraphs or relevant content here */}
         </div>
 
       </div>
