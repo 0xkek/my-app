@@ -33,7 +33,7 @@ export default function AboutPage() {
             Welcome! This site serves as my personal digital playground and notebook for exploring the world of Solana development, web3 concepts, and blockchain technology in general.
           </p>
           <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-3">
-            What You'll Find
+            What You&lsquo;ll Find
           </h2>
           <p className="text-lg text-slate-700 dark:text-slate-300 mb-6 leading-relaxed">
             Here, I plan to document experiments, share thoughts on the ecosystem (like the blog posts on NFT and betting ideas!), and potentially showcase small projects or protocol interactions I build. Think of it as learning in public.
@@ -42,7 +42,7 @@ export default function AboutPage() {
             The Goal
           </h2>
           <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
-            The main goal is simply to learn, tinker, and share. If you find something interesting or it sparks an idea for you, that's fantastic!
+            The main goal is simply to learn, tinker, and share. If you find something interesting or it sparks an idea for you, that&lsquo;s fantastic!
           </p>
         </div>
 

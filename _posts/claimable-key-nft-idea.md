@@ -59,4 +59,4 @@ So, for building something here in the `smoothbrain.xyz` playground, the **Claim
 * The Anchor smart contract to handle minting the SBT and tracking claims.
 * Maybe even play with a simple version of the key-to-trait generation later.
 
-It's a cool way to explore NFTs, identity, and dApp interactions on Solana! What do you think of this version of the post? Does it sound a bit more natural? 😊
+It's a cool way to explore NFTs, identity, and dApp interactions on Solana!

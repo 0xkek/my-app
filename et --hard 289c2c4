@@ -1,0 +1,37 @@
+[33m253e842[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m Fix: Resolve final ESLint/TypeScript errors
+[33m0c7c6bb[m Fix: Resolve ESLint/TypeScript errors for Vercel build
+[33m5071dbf[m Feat(comments): Finalize comment section UI and simulation logic
+[33mb9ba7e5[m Feat(comments): Add conditional UI and connect button to CommentSection
+[33m6eabf22[m Refactor: Restore blog page, fix comment trigger, restore wallets
+[33m9968d3b[m Feat: Configure Outfit font via tailwind.config.ts and install typography plugin
+[33m6e40ad4[m Feat: Update projects list with wallet-based comments idea
+[33mc0aaa5e[m Refactor: Remove example/test blog posts
+[33m3d13db6[m Docs: Add blog post about wallet-as-identity concept
+[33m16c647b[m Fix: Correct image display and styling on About page
+[33m8065d6d[m Docs: Add blog post about claimable key-NFT idea
+[33ma9c18b5[m Docs: Add blog post about in-wallet ad network idea
+[33m9159aff[m Docs: Add blog post about Solana betting app idea
+[33md2a2a5a[m Style: Adjust blog post content size to prose-lg
+[33m8e888f1[m Docs: Update content for NFT burn idea post (remove author, adjust tone)
+[33m09adeed[m Feat: Apply refined styling and placeholder cards to Projects page
+[33m96ea32f[m Refactor: Disable wallet auto-connect feature
+[33m9675b18[m Fix: Use string concatenation for address truncation in WalletStatus
+[33m3e5c199[m Feat: Refine styling for project cards on projects page
+[33m9baac7d[m Fix: Correct address truncation display in WalletStatus component
+[33m9a91277[m Feat: Add styling and placeholder cards to Projects page
+[33m5626e13[m Feat: Add active link styling to header navigation
+[33m4809d32[m Feat: Add styling to individual blog post page layout
+[33maae9bb4[m Feat: Add styling and placeholder cards to Projects page
+[33m9c2eba7[m Feat: Add styling and layout to About page
+[33md5aa89e[m Feat: Style blog index page post previews as cards
+[33ma87f158[m Fix: Resolve wallet button hydration error using dynamic import
+[33m289c2c4[m Feat: Set up Solana wallet adapter providers and add connect button
+[33m5156046[m Feat: Apply hero and card styling to homepage
+[33m0659d19[m Fix: Resolve hydration error in root layout
+[33ma57a573[m Feat: Implement Markdown blog post rendering with dynamic routes
+[33md362d4c[m Fix: Display dynamic post metadata and clean up posts lib
+[33m88cab2f[m Feat: Add projects page structure and navigation link
+[33m4415637[m Feat: Add sample blog post page and link from index
+[33m6f95ab8[m Feat: Add blog page structure and navigation link
+[33me4f3788[m Fix: Escape apostrophes in text for ESLint
+[33m5bd6c89[m Initial project setup with homepage, about page, and basic styling

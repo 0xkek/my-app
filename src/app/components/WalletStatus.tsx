@@ -75,10 +75,20 @@ export function WalletStatus() {
        const signature = await signMessage(message);
        console.log("Signature:", Buffer.from(signature).toString('base64'));
        setMessageStatus('Message Signed Successfully!');
-     } catch (error: any) {
-       console.error('Error signing message:', error);
-       setMessageStatus(`Sign Message Failed: ${error.message}`);
-     }
+      } catch (error: unknown) { // <--- Change 'any' to 'unknown' here
+        console.error('Error signing message:', error);
+        // Add type guards before accessing error properties:
+        let errorMsg = 'Sign Message Failed.'; // Default message
+        const rejectedByUser = error instanceof Error && (error.message?.includes('User rejected') || (typeof error === 'object' && error !== null && 'code' in error && error.code === 4001));
+        if (rejectedByUser) {
+           errorMsg = 'Signature rejected in wallet.';
+        } else if (error instanceof Error) {
+           errorMsg = `Sign Message Failed: ${error.message}`;
+        }
+        setMessageStatus(errorMsg); // Set status based on checks
+      }
+      // The finally block (if you have one) remains the same
+    // The closing brace and dependency array of useCallback remain the same
   }, [publicKey, signMessage]);
 
   return (
