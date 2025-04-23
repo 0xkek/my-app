@@ -1,4 +1,4 @@
-// src/components/CommentSection.tsx (FINAL - Fix result.newComment Type Errors)
+// src/components/CommentSection.tsx (FIXED)
 'use client';
 
 import React, { useState, useCallback, FormEvent, useEffect } from 'react';
@@ -13,9 +13,19 @@ const WalletMultiButtonDynamic = dynamic(
     { ssr: false }
 );
 
-// Helper functions
-const truncateAddress = (address: string | undefined | null): string => { if (!address) return ''; return `<span class="math-inline">\{address\.substring\(0,4\)\}\.\.\.</span>{address.substring(address.length - 4)}`; };
-const formatTimestamp = (isoString: string): string => { try { return new Date(isoString).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short'}); } catch { return isoString; } };
+// Helper functions - FIXED truncateAddress function
+const truncateAddress = (address: string | undefined | null): string => { 
+  if (!address) return ''; 
+  return `${address.substring(0,4)}...${address.substring(address.length - 4)}`; 
+};
+
+const formatTimestamp = (isoString: string): string => { 
+  try { 
+    return new Date(isoString).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short'}); 
+  } catch { 
+    return isoString; 
+  } 
+};
 
 interface CommentSectionProps { postId: string; }
 
@@ -60,7 +70,7 @@ export function CommentSection({ postId }: CommentSectionProps) {
     setIsSubmitting(true); setSubmitStatus(''); setMessageStatus('Please sign message...');
 
     try {
-      const messageToSign = `Comment on post "<span class="math-inline">\{postId\}"\:\\n\\n</span>{trimmedComment}`;
+      const messageToSign = `Comment on post "${postId}":\n\n${trimmedComment}`;
       const messageBytes = new TextEncoder().encode(messageToSign);
       const signature = await signMessage(messageBytes);
       const signatureBase64 = Buffer.from(signature).toString('base64');
