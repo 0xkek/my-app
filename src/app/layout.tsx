@@ -1,4 +1,4 @@
-// src/app/layout.tsx (Stable State - Default Font/Size)
+// src/app/layout.tsx (Updated with Favicon)
 import type { Metadata } from "next";
 import { Inter } from "next/font/google"; // Use default Inter font
 import "./globals.css";
@@ -7,7 +7,14 @@ import { SiteHeader } from './components/SiteHeader';
 
 const inter = Inter({ subsets: ["latin"] }); // Default font setup
 
-export const metadata: Metadata = { title: "Smoothbrain XYZ Playground", description: "Exploring Solana ideas and projects", };
+export const metadata: Metadata = { 
+  title: "Smoothbrain XYZ Playground", 
+  description: "Exploring Solana ideas and projects",
+  icons: {
+    icon: '/smoovbrain-logo.png',
+    // Optional: Include more sizes/formats
+  }
+};
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode; }>) {
   const currentYear = new Date().getFullYear();
