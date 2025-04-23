@@ -1,4 +1,4 @@
-// src/actions/commentActions.ts (FINAL Corrected Version)
+// src/actions/commentActions.ts (FINAL - Fixing kv.lpush Type Error)
 'use server';
 
 import { kv } from '@vercel/kv';
@@ -40,11 +40,29 @@ export async function getCommentsAction(postId: string): Promise<Comment[]> {
     return [];
   }
   try {
-    // Fetch all comments from the list for this post ID
-    const comments = await kv.lrange<Comment>(`comments:${postId}`, 0, -1);
-    console.log(`[getCommentsAction] Fetched ${comments?.length ?? 0} comments for ${postId}`);
-    // Reverse locally if you want newest first (lpush adds to left/head)
-    return comments?.reverse() || [];
+    // Fetch all comment strings from the list
+    const commentStrings = await kv.lrange(`comments:${postId}`, 0, -1);
+    console.log(`[getCommentsAction] Fetched ${commentStrings?.length ?? 0} comment strings for ${postId}`);
+
+    if (!commentStrings || commentStrings.length === 0) {
+      return [];
+    }
+
+    // --- Parse each string back into a Comment object ---
+    const comments: Comment[] = commentStrings.map((commentString) => {
+        try {
+            // Ensure commentString is treated as string before parsing
+            return JSON.parse(String(commentString)) as Comment;
+        } catch (parseError) {
+            console.error("Failed to parse comment string:", commentString, parseError);
+            return null; // Return null for invalid entries
+        }
+    }).filter((comment): comment is Comment => comment !== null); // Filter out any nulls from parse errors
+    // ----------------------------------------------------
+
+    // Reverse locally to show newest first (lpush adds to head)
+    return comments.reverse();
+
   } catch (error) {
     console.error(`[getCommentsAction] Error fetching comments for post ${postId}:`, error);
     return [];
@@ -80,7 +98,7 @@ export async function submitCommentAction(payload: SubmitPayload): Promise<Submi
   try {
     // --- Signature Verification using tweetnacl ---
     console.log("[submitCommentAction] Verifying signature using tweetnacl...");
-    const messageBytes = new TextEncoder().encode(payload.message); // Use message from payload
+    const messageBytes = new TextEncoder().encode(payload.message);
     const signatureBytes = Buffer.from(payload.signature, 'base64');
     const publicKeyBytes = new PublicKey(payload.author).toBytes();
 
@@ -93,24 +111,26 @@ export async function submitCommentAction(payload: SubmitPayload): Promise<Submi
     console.log("[submitCommentAction] Signature verified successfully!");
     // --- End Signature Verification ---
 
+
     // --- Create and Store Comment ---
     const commentToStore: Comment = {
-      id: crypto.randomUUID(), // Use crypto.randomUUID for better uniqueness
+      id: crypto.randomUUID(),
       postId: payload.postId,
       author: payload.author,
       text: trimmedText, // Store trimmed version
       timestamp: new Date().toISOString(),
     };
 
-    // Add comment to the START of the list associated with the post ID
-    await kv.lpush<Comment>(`comments:${payload.postId}`, commentToStore);
+    // --- Stringify the comment object before pushing to the list ---
+    await kv.lpush(`comments:${payload.postId}`, JSON.stringify(commentToStore));
+    // -------------------------------------------------------------
     console.log("[submitCommentAction] Comment saved successfully:", commentToStore.id);
 
-    // Revalidate the path so the list updates for others
+    // Revalidate the path
     revalidatePath(`/blog/${payload.postId}`);
 
     // Return success and the new comment object
-    return { success: true, newComment: commentToStore }; // Use correct property name
+    return { success: true, newComment: commentToStore };
 
   } catch (error) {
     console.error("[submitCommentAction] Error during submission:", error);
