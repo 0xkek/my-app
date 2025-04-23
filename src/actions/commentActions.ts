@@ -1,118 +1,119 @@
-// src/actions/commentActions.ts (Re-enabling Verification)
+// src/actions/commentActions.ts (FINAL Corrected Version)
 'use server';
 
 import { kv } from '@vercel/kv';
-import { revalidatePath } from 'next/cache';
+import { PublicKey } from '@solana/web3.js';
 import nacl from 'tweetnacl';
-import { Buffer } from 'buffer'; // Use Buffer for decoding
-import { PublicKey } from '@solana/web3.js'; // Use PublicKey for validation
+import { Buffer } from 'buffer';
+import { revalidatePath } from 'next/cache';
 
-// Define Comment type (used by client and server)
-export type Comment = {
+// Export Comment type
+export interface Comment {
   id: string;
   postId: string;
-  author: string; // Wallet public key (base58)
+  author: string; // Base58 public key string
+  timestamp: string; // ISO 8601 timestamp string
   text: string;
-  timestamp: string; // ISO string
-};
+}
 
-// Type for the payload coming from the client
-type SubmitCommentPayload = {
-  postId: string;
-  text: string;
-  author: string; // base58 public key
-  signature: string; // base64 encoded signature
-  message: string; // Original message that was signed
-};
+// Export SubmitResult type
+export interface SubmitResult {
+    success: boolean;
+    error?: string;
+    newComment?: Comment; // Optional 'newComment' on success
+}
 
-// Get comments for a post
+// Type for payload from client (internal)
+interface SubmitPayload {
+    postId: string;
+    text: string;
+    author: string;
+    signature: string; // Base64 encoded signature
+    message: string; // Original message that was signed
+}
+
+
+// --- Action to GET comments for a specific post ---
 export async function getCommentsAction(postId: string): Promise<Comment[]> {
+  if (!postId) {
+    console.error("[getCommentsAction] Error: postId is required.");
+    return [];
+  }
   try {
-    const commentIds = await kv.zrange(`comments:${postId}`, 0, -1, { rev: true });
-    if (!commentIds || commentIds.length === 0) {
-      return [];
-    }
-    // Use pipeline for efficient fetching if many comments are expected
-    const pipeline = kv.pipeline();
-    commentIds.forEach(id => pipeline.hgetall(`comment:${id}`));
-    const results = await pipeline.exec<Comment[]>();
-    // Filter out potential null results if a comment was deleted between zrange and hgetall
-    return results.filter((comment): comment is Comment => comment !== null);
+    // Fetch all comments from the list for this post ID
+    const comments = await kv.lrange<Comment>(`comments:${postId}`, 0, -1);
+    console.log(`[getCommentsAction] Fetched ${comments?.length ?? 0} comments for ${postId}`);
+    // Reverse locally if you want newest first (lpush adds to left/head)
+    return comments?.reverse() || [];
   } catch (error) {
-    console.error("Error fetching comments:", error);
-    return []; // Return empty array on error
+    console.error(`[getCommentsAction] Error fetching comments for post ${postId}:`, error);
+    return [];
   }
 }
 
-// Submit a new comment
-export async function submitCommentAction(
-  payload: SubmitCommentPayload
-): Promise<{ success: boolean; comment?: Comment; error?: string }> {
-  const { postId, text, author, signature, message } = payload;
+// --- Action to SUBMIT a new comment ---
+export async function submitCommentAction(payload: SubmitPayload): Promise<SubmitResult> {
+  console.log("[submitCommentAction] Received payload for post:", payload.postId);
 
-  // --- 1. Input Validation ---
-  if (!postId || !text || !author || !signature || !message) {
-    return { success: false, error: 'Missing required fields.' };
+  // --- Input Validation ---
+  if (!payload.postId || !payload.text || !payload.author || !payload.signature || !payload.message) {
+    console.warn("[submitCommentAction] Validation failed: Missing required fields.");
+    return { success: false, error: "Missing required fields." };
   }
-  if (text.length > 500) { // Example length limit
-    return { success: false, error: 'Comment text exceeds maximum length.' };
+  const trimmedText = payload.text.trim();
+  if (!trimmedText) {
+      console.warn("[submitCommentAction] Validation failed: Comment empty.");
+      return { success: false, error: "Comment text cannot be empty."};
+  }
+  if (trimmedText.length > 1000) {
+      console.warn("[submitCommentAction] Validation failed: Comment too long.");
+      return { success: false, error: "Comment text exceeds 1000 characters." };
   }
   try {
-     // Validate author is a valid Solana public key address
-     new PublicKey(author);
+      new PublicKey(payload.author); // Validate pubkey format
   } catch (e) {
-     console.error("Invalid author public key format:", author, e);
-     return { success: false, error: 'Invalid author public key.' };
+      console.error("[submitCommentAction] Invalid author public key format for:", payload.author, "Error:", e);
+      return { success: false, error: "Invalid author public key format." };
   }
+  // --- End Validation ---
 
-
-  // --- 2. Signature Verification ---
   try {
-    const messageBytes = new TextEncoder().encode(message);
-    const signatureBytes = Buffer.from(signature, 'base64'); // Decode base64 signature
-    const publicKeyBytes = new PublicKey(author).toBytes(); // Get public key bytes
+    // --- Signature Verification using tweetnacl ---
+    console.log("[submitCommentAction] Verifying signature using tweetnacl...");
+    const messageBytes = new TextEncoder().encode(payload.message); // Use message from payload
+    const signatureBytes = Buffer.from(payload.signature, 'base64');
+    const publicKeyBytes = new PublicKey(payload.author).toBytes();
 
-    // Verify using tweetnacl
     const isVerified = nacl.sign.detached.verify(messageBytes, signatureBytes, publicKeyBytes);
 
     if (!isVerified) {
-      console.warn("Signature verification failed for author:", author);
-      return { success: false, error: 'Signature verification failed.' };
+      console.warn("[submitCommentAction] Signature verification FAILED!");
+      return { success: false, error: "Signature verification failed. Comment not saved." };
     }
-    console.log("Signature verified successfully for:", author);
+    console.log("[submitCommentAction] Signature verified successfully!");
+    // --- End Signature Verification ---
 
-  } catch (error) {
-    console.error("Error during signature verification:", error);
-    return { success: false, error: 'An error occurred during signature verification.' };
-  }
-
-  // --- 3. Create and Save Comment ---
-  try {
-    const newComment: Comment = {
-      id: crypto.randomUUID(), // Generate unique ID
-      postId: postId,
-      author: author,
-      text: text,
-      timestamp: new Date().toISOString(), // Use ISO string for consistency
+    // --- Create and Store Comment ---
+    const commentToStore: Comment = {
+      id: crypto.randomUUID(), // Use crypto.randomUUID for better uniqueness
+      postId: payload.postId,
+      author: payload.author,
+      text: trimmedText, // Store trimmed version
+      timestamp: new Date().toISOString(),
     };
 
-    // Use Vercel KV to store the comment
-    // Store the comment hash
-    await kv.hset(`comment:${newComment.id}`, newComment);
-    // Add comment ID to the sorted set for the post (score by timestamp)
-    await kv.zadd(`comments:${postId}`, { score: Date.now(), member: newComment.id });
+    // Add comment to the START of the list associated with the post ID
+    await kv.lpush<Comment>(`comments:${payload.postId}`, commentToStore);
+    console.log("[submitCommentAction] Comment saved successfully:", commentToStore.id);
 
-    console.log(`Comment ${newComment.id} saved for post ${postId}`);
+    // Revalidate the path so the list updates for others
+    revalidatePath(`/blog/${payload.postId}`);
 
-    // --- 4. Revalidation (Optional but recommended) ---
-    // Revalidate the blog post page cache so others see the new comment sooner
-    revalidatePath(`/blog/${postId}`);
-
-    // --- 5. Return Success ---
-    return { success: true, comment: newComment };
+    // Return success and the new comment object
+    return { success: true, newComment: commentToStore }; // Use correct property name
 
   } catch (error) {
-    console.error("Error saving comment to KV:", error);
-    return { success: false, error: 'Failed to save comment.' };
+    console.error("[submitCommentAction] Error during submission:", error);
+    return { success: false, error: "Failed to save comment due to a server error." };
   }
 }
