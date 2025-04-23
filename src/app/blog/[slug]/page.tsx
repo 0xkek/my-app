@@ -1,17 +1,16 @@
-// src/app/blog/[slug]/page.tsx (Correct async pattern + Props type for Next.js 15)
-
+// src/app/blog/[slug]/page.tsx (Async Server Component for Next 14)
 import { getPostData, getAllPostIds } from '../../../../lib/posts';
-import { CommentSection } from '../../components/CommentSection'; // Correct path
+import { CommentSection } from '../../components/CommentSection'; // Use 2 dots path
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
-// --- CORRECT Props Type Definition for Next.js 15 Async Params ---
+// Standard Props type for Server Components
 type Props = {
-  params: Promise<{ slug: string }>; // Params is expected as a Promise
+  params: { slug: string };
 };
-// --------------------------------------------------------------------
 
+// Standard generateStaticParams
 export async function generateStaticParams() {
    try {
      const paths = getAllPostIds();
@@ -19,13 +18,11 @@ export async function generateStaticParams() {
    } catch (error) { console.error("Error generating static params:", error); return []; }
 }
 
-// generateMetadata receives Props (where params is Promise)
-export async function generateMetadata({ params: paramsPromise }: Props): Promise<Metadata> {
+// Standard generateMetadata
+export async function generateMetadata({ params }: Props): Promise<Metadata> { // Use standard signature
   try {
-    const params = await paramsPromise; // Must await the params Promise
-    const slug = params.slug;
-    if (!slug) { throw new Error("Slug missing after await in generateMetadata"); }
-
+    const slug = params.slug; // Access directly
+    if (!slug) { throw new Error("Slug missing for metadata"); }
     const postData = await getPostData(slug);
     return {
       title: postData.title,
@@ -37,14 +34,13 @@ export async function generateMetadata({ params: paramsPromise }: Props): Promis
   }
 }
 
-// PostPage receives Props (where params is Promise)
-export default async function PostPage({ params: paramsPromise }: Props) {
-  const params = await paramsPromise; // Must await the params Promise
-  const postId = params.slug;
-  if (!postId) { notFound(); }
+// Standard Async Server Component page
+export default async function PostPage({ params }: Props) { // Use standard signature
+  const postId = params.slug; // Access directly
+  if (!postId) { notFound(); } // Use notFound directly
 
   try {
-    const postData = await getPostData(postId);
+    const postData = await getPostData(postId); // Fetch directly
 
     return (
       <div className="py-8 md:py-12">
@@ -52,6 +48,7 @@ export default async function PostPage({ params: paramsPromise }: Props) {
            <span aria-hidden="true" className="transition-transform group-hover:-translate-x-1">&larr;</span> Back to Blog List
          </Link>
         <div className="max-w-3xl mx-auto">
+          {/* Header */}
           <div className="mb-8 border-b border-slate-200 dark:border-slate-700 pb-6">
             <h1 className="!text-3xl sm:!text-4xl lg:!text-5xl font-bold text-slate-900 dark:text-slate-100 mb-3">
               {postData.title}
@@ -60,9 +57,10 @@ export default async function PostPage({ params: paramsPromise }: Props) {
               Published on {postData.date}
             </p>
           </div>
-          <article className="prose prose-lg dark:prose-invert max-w-none"
+          {/* Content - Reverted to original prose size */}
+          <article className="prose lg:prose-xl dark:prose-invert max-w-none"
                    dangerouslySetInnerHTML={{ __html: postData.contentHtml }} />
-          {/* Use the CommentSection component confirmed stable earlier */}
+          {/* Comment Section */}
           <CommentSection postId={postId} />
         </div>
       </div>

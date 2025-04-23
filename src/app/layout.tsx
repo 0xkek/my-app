@@ -1,34 +1,19 @@
-// src/app/layout.tsx (Using Outfit font and text-lg)
-
+// src/app/layout.tsx (Stable State - Default Font/Size)
 import type { Metadata } from "next";
-// --- Import Outfit font ---
-import { Outfit } from "next/font/google";
-// --------------------------
+import { Inter } from "next/font/google"; // Use default Inter font
 import "./globals.css";
 import { Providers } from './providers';
 import { SiteHeader } from './components/SiteHeader';
 
-// --- Configure Outfit ---
-const outfit = Outfit({ subsets: ["latin"] });
-// ------------------------
+const inter = Inter({ subsets: ["latin"] }); // Default font setup
 
-export const metadata: Metadata = {
-  title: "Smoothbrain XYZ Playground",
-  description: "Exploring Solana ideas and projects",
-};
+export const metadata: Metadata = { title: "Smoothbrain XYZ Playground", description: "Exploring Solana ideas and projects", };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode; }>) {
   const currentYear = new Date().getFullYear();
-
   return (
     <html lang="en" className="h-full">
-      {/* --- Apply Outfit font class name & text-lg --- */}
-      <body className={`${outfit.className} flex flex-col min-h-screen text-slate-900 dark:text-slate-200 text-lg`}>
-      {/* -------------------------------------------- */}
+      <body className={`${inter.className} flex flex-col min-h-screen text-slate-900 dark:text-slate-200`}> {/* Default font and size */}
         <Providers>
           <SiteHeader />
           <main className="container mx-auto p-4 flex-grow">

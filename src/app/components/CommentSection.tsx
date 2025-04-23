@@ -1,30 +1,29 @@
-// src/components/CommentSection.tsx (FINAL - Build Stable Simulation Version - Corrected Syntax)
+// src/components/CommentSection.tsx (Stable UI - Simulates Submit Only)
 'use client';
-
 import React, { useState, useCallback, FormEvent } from 'react';
 import { useWallet } from '@solana/wallet-adapter-react';
 import dynamic from 'next/dynamic';
-// Buffer import removed previously, keep removed
+// Removed Buffer/Action imports for this stable version
 
-const WalletMultiButtonDynamic = dynamic(
-    async () => (await import('@solana/wallet-adapter-react-ui')).WalletMultiButton,
-    { ssr: false }
-);
+const WalletMultiButtonDynamic = dynamic( async () => (await import('@solana/wallet-adapter-react-ui')).WalletMultiButton, { ssr: false } );
 
-// Keep types and helpers
+// Simplified Comment type for local display only
 type TempComment = { id: string; author: string; timestamp: string; text: string; };
 interface CommentSectionProps { postId: string; }
-const truncateAddress = (address: string | undefined | null): string => { if (!address) return ''; return `<span class="math-inline">\{address\.substring\(0,4\)\}\.\.\.</span>{address.substring(address.length - 4)}`; };
+
+// Helper function
+const truncateAddress = (address: string | undefined | null): string => { if (!address) return ''; return `${address.substring(0,4)}...${address.substring(address.length - 4)}`; };
+// Helper function
 const formatTimestamp = (isoString: string): string => { try { return new Date(isoString).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short'}); } catch { return isoString; } };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function CommentSection({ postId }: CommentSectionProps) {
-  const { connected, publicKey } = useWallet(); // Removed unused signMessage
+  // Only need connected and publicKey for simulation logic
+  const { connected, publicKey } = useWallet();
   const [newComment, setNewComment] = useState('');
-  const [comments, setComments] = useState<TempComment[]>([]);
+  const [comments, setComments] = useState<TempComment[]>([]); // Local state only
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState('');
-  // Removed unused messageStatus
+  // Removed messageStatus
 
   // Removed useEffect for loading
 
@@ -40,8 +39,7 @@ export function CommentSection({ postId }: CommentSectionProps) {
     setIsSubmitting(true);
     setSubmitStatus('Adding comment locally...');
 
-    // Simulation logic
-    setTimeout(() => {
+    setTimeout(() => { // Simulate delay
         const optimisticComment: TempComment = {
           id: `temp-${Date.now()}`,
           author: publicKey.toBase58(),
@@ -54,10 +52,9 @@ export function CommentSection({ postId }: CommentSectionProps) {
         setIsSubmitting(false);
         setTimeout(() => setSubmitStatus(''), 4000);
     }, 500);
-  // Removed postId and signMessage from dependency array, REMOVED MISPLACED COMMENT
+  // Removed signMessage from dependency array, postId not used inside simulation
   }, [connected, publicKey, newComment]);
 
-  // --- JSX Structure ---
   return (
     <div className="mt-12 pt-8 border-t border-slate-200 dark:border-slate-700">
       <h2 className="text-2xl font-semibold mb-6 text-slate-800 dark:text-slate-200">Leave a Comment</h2>
@@ -70,14 +67,12 @@ export function CommentSection({ postId }: CommentSectionProps) {
         <form onSubmit={handleSubmit} className="mb-8">
            <label htmlFor="comment-textarea" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Your Comment:</label>
            <textarea id="comment-textarea" value={newComment} onChange={(e) => setNewComment(e.target.value)} placeholder="Share your thoughts..." rows={4} required className="w-full p-3 border border-slate-300 dark:border-slate-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none dark:bg-slate-700 dark:text-slate-100 disabled:opacity-70" disabled={isSubmitting} />
-           {/* Removed signing warning */}
            <div className="flex justify-between items-center mt-3 gap-4">
              {submitStatus && <p className="text-xs text-slate-500 dark:text-slate-400 flex-grow text-left italic">{submitStatus}</p>}
              <button type="submit" disabled={isSubmitting || !newComment.trim()} className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-500 text-white font-semibold py-2 px-5 rounded-md shadow transition-colors disabled:cursor-not-allowed">
                {isSubmitting ? 'Posting...' : 'Post Comment'}
              </button>
            </div>
-             {/* Removed messageStatus display */}
         </form>
       ) : null }
       <h3 className="text-xl font-semibold mb-4 text-slate-800 dark:text-slate-200">Comments ({comments.length})</h3>
