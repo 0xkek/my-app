@@ -1,133 +1,87 @@
-// src/components/CommentSection.tsx (FINAL STABLE UI + SIMULATION)
+// src/components/CommentSection.tsx (FINAL - Build Stable Simulation Version - Corrected Syntax)
 'use client';
 
 import React, { useState, useCallback, FormEvent } from 'react';
-// Only import useWallet for this version
 import { useWallet } from '@solana/wallet-adapter-react';
 import dynamic from 'next/dynamic';
+// Buffer import removed previously, keep removed
 
-// Dynamic import for the reliable button
 const WalletMultiButtonDynamic = dynamic(
     async () => (await import('@solana/wallet-adapter-react-ui')).WalletMultiButton,
     { ssr: false }
 );
 
-// Define Comment type for local state
+// Keep types and helpers
 type TempComment = { id: string; author: string; timestamp: string; text: string; };
 interface CommentSectionProps { postId: string; }
+const truncateAddress = (address: string | undefined | null): string => { if (!address) return ''; return `<span class="math-inline">\{address\.substring\(0,4\)\}\.\.\.</span>{address.substring(address.length - 4)}`; };
+const formatTimestamp = (isoString: string): string => { try { return new Date(isoString).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short'}); } catch { return isoString; } };
 
-// Helper function
-const truncateAddress = (address: string | undefined | null): string => {
-  if (!address) return '';
-  const start = address.substring(0, 4);
-  const end = address.substring(address.length - 4);
-  return start + '...' + end;
-};
-
-// Helper function (keep in case comments loaded later)
-const formatTimestamp = (isoString: string): string => {
-    try { return new Date(isoString).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short'}); }
-    catch { return isoString; }
-};
-
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function CommentSection({ postId }: CommentSectionProps) {
-  // Get necessary values from useWallet
-  const { connected, publicKey, signMessage } = useWallet();
-
-  // State for the form and local optimistic updates
+  const { connected, publicKey } = useWallet(); // Removed unused signMessage
   const [newComment, setNewComment] = useState('');
-  const [comments, setComments] = useState<TempComment[]>([]); // Local state only
+  const [comments, setComments] = useState<TempComment[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState('');
-  const [messageStatus, setMessageStatus] = useState<string>(''); // Keep for simulation feedback
+  // Removed unused messageStatus
 
-  // Removed useEffect for loading real comments for now
+  // Removed useEffect for loading
 
-  // Handler that simulates signing and posting
-  const handleSubmit = useCallback(async (event: FormEvent) => {
+  // Simulation handleSubmit
+  const handleSubmit = useCallback((event: FormEvent) => {
     event.preventDefault();
     const trimmedComment = newComment.trim();
-    // Check required state, including signMessage availability for button logic
-    if (!connected || !publicKey || !signMessage || !trimmedComment) {
-        setSubmitStatus('Wallet not connected, cannot sign, or comment empty.');
+    if (!connected || !publicKey || !trimmedComment) {
+        setSubmitStatus('Wallet not connected or comment empty.');
         return;
     }
-    setIsSubmitting(true); setSubmitStatus('');
-    setMessageStatus('Simulating signature request...'); // Indicate simulation step
+    console.log("Simulating comment add for:", trimmedComment);
+    setIsSubmitting(true);
+    setSubmitStatus('Adding comment locally...');
 
-    try {
-      // Simulate signing delay
-      await new Promise(resolve => setTimeout(resolve, 500));
-      console.log('Simulated signing step complete.');
-      setMessageStatus('Simulating submission...'); // Update status
+    // Simulation logic
+    setTimeout(() => {
+        const optimisticComment: TempComment = {
+          id: `temp-${Date.now()}`,
+          author: publicKey.toBase58(),
+          timestamp: new Date().toLocaleDateString('en-CA'),
+          text: trimmedComment
+        };
+        setComments(prev => [optimisticComment, ...prev]);
+        setNewComment('');
+        setSubmitStatus('Comment added locally (will disappear on refresh).');
+        setIsSubmitting(false);
+        setTimeout(() => setSubmitStatus(''), 4000);
+    }, 500);
+  // Removed postId and signMessage from dependency array, REMOVED MISPLACED COMMENT
+  }, [connected, publicKey, newComment]);
 
-      // Simulate backend delay & data prep
-      await new Promise(resolve => setTimeout(resolve, 500));
-      const payload = { postId, text: trimmedComment, author: publicKey.toBase58(), signature: 'simulated_base64_signature' };
-      console.log('Simulating submit to backend with payload:', payload);
-
-      // Optimistic Update
-      const optimisticComment: TempComment = { id: `temp-${Date.now()}`, author: publicKey.toBase58(), timestamp: new Date().toLocaleDateString('en-CA'), text: trimmedComment };
-      setComments(prev => [optimisticComment, ...prev]);
-      setNewComment('');
-      setSubmitStatus('Comment added (simulation)!');
-      setMessageStatus('');
-
-    } catch (error: unknown) { // Catch any unexpected error in simulation
-      console.error('Comment submission error simulation:', error);
-      setSubmitStatus(`Error: Simulation failed.`);
-      setMessageStatus('');
-    } finally {
-      setIsSubmitting(false);
-      setTimeout(() => setSubmitStatus(''), 4000);
-    }
-  }, [connected, publicKey, signMessage, newComment, postId]); // Keep dependencies
-
+  // --- JSX Structure ---
   return (
     <div className="mt-12 pt-8 border-t border-slate-200 dark:border-slate-700">
       <h2 className="text-2xl font-semibold mb-6 text-slate-800 dark:text-slate-200">Leave a Comment</h2>
       {!connected ? (
         <div className="mb-8 p-4 flex flex-col items-center">
-          {/* Use the reliable button when disconnected */}
           <WalletMultiButtonDynamic style={{ height: '38px', fontSize: '14px' }} />
           <p className="text-sm text-slate-500 dark:text-slate-400 mt-2">Connect your wallet to leave a comment.</p>
         </div>
       ) : publicKey ? (
-        // Form shown when connected
         <form onSubmit={handleSubmit} className="mb-8">
            <label htmlFor="comment-textarea" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Your Comment:</label>
-           <textarea
-             id="comment-textarea" value={newComment} onChange={(e) => setNewComment(e.target.value)}
-             placeholder="Share your thoughts..." rows={4} required
-             className="w-full p-3 border border-slate-300 dark:border-slate-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none dark:bg-slate-700 dark:text-slate-100 disabled:opacity-70"
-             disabled={isSubmitting} // Only disable while submitting simulation
-           />
-           {/* Warning if wallet might not support signing */}
-           {!signMessage && <p className="text-xs text-red-500 mt-1">Warning: Your connected wallet may not support message signing.</p>}
+           <textarea id="comment-textarea" value={newComment} onChange={(e) => setNewComment(e.target.value)} placeholder="Share your thoughts..." rows={4} required className="w-full p-3 border border-slate-300 dark:border-slate-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none dark:bg-slate-700 dark:text-slate-100 disabled:opacity-70" disabled={isSubmitting} />
+           {/* Removed signing warning */}
            <div className="flex justify-between items-center mt-3 gap-4">
-             {/* Show submission status */}
              {submitStatus && <p className="text-xs text-slate-500 dark:text-slate-400 flex-grow text-left italic">{submitStatus}</p>}
-             <button
-               type="submit"
-               // Disable based on state and input, check signMessage availability too
-               disabled={isSubmitting || !newComment.trim() || !signMessage}
-               className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-500 text-white font-semibold py-2 px-5 rounded-md shadow transition-colors disabled:cursor-not-allowed"
-             >
+             <button type="submit" disabled={isSubmitting || !newComment.trim()} className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-500 text-white font-semibold py-2 px-5 rounded-md shadow transition-colors disabled:cursor-not-allowed">
                {isSubmitting ? 'Posting...' : 'Post Comment'}
              </button>
            </div>
-            {/* Show intermediate message status */}
-            {messageStatus && (
-              <p className={`text-xs mt-2 text-orange-600 dark:text-orange-400 text-right`}>
-                {messageStatus}
-              </p>
-            )}
+             {/* Removed messageStatus display */}
         </form>
       ) : null }
-
       <h3 className="text-xl font-semibold mb-4 text-slate-800 dark:text-slate-200">Comments ({comments.length})</h3>
       <div className="space-y-4">
-         {/* Comment list logic - only shows optimistically added comments */}
          {comments.length > 0 ? (
            comments.map(comment => (
              <div key={comment.id} className="p-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg shadow-sm">
