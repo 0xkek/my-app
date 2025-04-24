@@ -8,7 +8,7 @@ import { SiteHeader } from './components/SiteHeader';
 const inter = Inter({ subsets: ["latin"] }); // Default font setup
 
 export const metadata: Metadata = { 
-  title: "Smoothbrain XYZ Playground", 
+  title: "sendbox.fun", 
   description: "Exploring Solana ideas and projects",
   icons: {
     icon: '/smoovbrain-logo.png',
@@ -27,7 +27,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             {children}
           </main>
           <footer className="w-full mt-auto py-4 text-center text-sm text-slate-500 dark:text-slate-400 border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900">
-            © {currentYear} smoothbrain.xyz | Made with Next.js
+            © {currentYear} sendbox.fun | Made with Next.js
           </footer>
         </Providers>
       </body>

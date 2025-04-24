@@ -15,7 +15,7 @@ export function SiteHeader() {
   return (
     <header className="bg-slate-800 text-white shadow-md sticky top-0 z-10">
       <div className="container mx-auto flex flex-wrap items-center justify-between p-4 gap-y-2">
-        <Link href="/" className="text-xl font-bold hover:text-slate-300 transition-colors mr-auto sm:mr-4">smoothbrain.xyz</Link>
+        <Link href="/" className="text-xl font-bold hover:text-slate-300 transition-colors mr-auto sm:mr-4">sendbox.fun</Link>
         <div className="flex items-center gap-x-4 sm:gap-x-6">
           <nav className="flex flex-wrap gap-x-4 sm:gap-x-6 gap-y-1 items-center">
             <Link href="/" className={`${baseLinkClass} text-lg ${getLinkClass('/')}`}>Home</Link>
