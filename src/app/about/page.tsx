@@ -1,50 +1,66 @@
-// src/app/about/page.tsx (Corrected Image Details)
+// src/app/about/page.tsx (Corrected Title & Logo Alignment)
+'use client'; // Keep if needed for Image component features
+
 import Image from 'next/image';
 
 export default function AboutPage() {
-  return (
-    <div className="py-8 md:py-12">
-      <h1 className="text-4xl font-bold text-slate-800 dark:text-slate-100 mb-8 text-center md:mb-12">
-        About This Playground
-      </h1>
+  // Define accent color if needed for this page
+  // const accentColor = '#FFAE00';
 
+  return (
+    // Container for centering and padding
+    <div className="container mx-auto px-4 py-16 sm:py-24">
+
+      {/* Grid Container: items-center for vertical alignment */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
 
         {/* Column 1: Image */}
-        <div className="flex justify-center md:justify-start">
-          {/* --- Corrected Image Details --- */}
+        <div className="flex justify-center"> {/* Center image horizontally */}
           <Image
-            src="/smoovbrain-logo.png" // Correct filename
-            alt="Smoothbrain Logo"    // Updated Alt Text (Adjust if needed)
-            width={300}               // Desired width
-            height={300}              // Desired height
-            className="rounded-lg shadow-lg object-cover max-w-full h-auto"
-            priority={true}
+            src="/e-logo-yellow-square-white-e.png" // YOUR NEW logo filename
+            alt="sendbox.fun 'e' logo"             // Updated Alt Text
+            width={784}                             // YOUR NEW logo actual width
+            height={796}                            // YOUR NEW logo actual height
+            priority
+            // Keep smaller max-width
+            className="rounded-lg shadow-lg object-cover max-w-[16rem] h-auto" // Max width 16rem (256px)
           />
-          {/* ------------------------------- */}
         </div>
 
-        {/* Column 2: Text Content */}
-        <div className="bg-white dark:bg-slate-800 p-6 md:p-8 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700">
-          <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-3">
-            Purpose
-          </h2>
-          <p className="text-lg text-slate-700 dark:text-slate-300 mb-6 leading-relaxed">
-            Welcome! This site serves as my personal digital playground and notebook for exploring the world of Solana development, web3 concepts, and blockchain technology in general.
-          </p>
-          <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-3">
-            What You&lsquo;ll Find
-          </h2>
-          <p className="text-lg text-slate-700 dark:text-slate-300 mb-6 leading-relaxed">
-            Here, I plan to document experiments, share thoughts on the ecosystem (like the blog posts on NFT and betting ideas!), and potentially showcase small projects or protocol interactions I build. Think of it as learning in public.
-          </p>
-          <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-3">
-            The Goal
-          </h2>
-          <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
-            The main goal is simply to learn, tinker, and share. If you find something interesting or it sparks an idea for you, that&lsquo;s fantastic!
-          </p>
+        {/* Column 2: Title and Text Content */}
+        {/* --- Moved H1 inside this column --- */}
+        <div>
+          {/* --- Title Now Aligned Left with text below --- */}
+          <h1 className="text-4xl font-bold text-white mb-8 md:mb-12"> {/* Removed text-center */}
+            About This Playground
+          </h1>
+          {/* ------------------------------------------- */}
+
+          {/* Text content */}
+          <div className="text-lg text-slate-300 space-y-5 leading-relaxed">
+            <h2 className="text-2xl font-semibold text-white mb-3">
+              Purpose
+            </h2>
+            <p>
+              Welcome! This site serves as my personal digital playground and notebook for exploring the world of Solana development, web3 concepts, and blockchain technology in general.
+            </p>
+
+            <h2 className="text-2xl font-semibold text-white mb-3">
+              What You&apos;ll Find
+            </h2>
+            <p>
+              Here, I plan to document experiments, share thoughts on the ecosystem (like the blog posts!), and potentially showcase small projects or protocol interactions I build. Think of it as learning in public.
+            </p>
+
+            <h2 className="text-2xl font-semibold text-white mb-3">
+              The Goal
+            </h2>
+            <p>
+              The main goal is simply to learn, tinker, and share. If you find something interesting or it sparks an idea for you, that&apos;s fantastic!
+            </p>
+          </div>
         </div>
+        {/* --- End Column 2 --- */}
 
       </div>
     </div>
