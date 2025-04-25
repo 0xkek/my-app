@@ -1,32 +1,44 @@
-// src/app/page.tsx (Homepage Redesign - Full Width Fix - Corrected)
+// src/app/page.tsx (Adding Particle Background to User's Code #444)
 'use client'; // Keep as client component because WalletStatus uses hooks
 
 import Link from 'next/link';
 import Image from 'next/image'; // Import Image component
 // Import WalletStatus component (ensure path is correct: ./components/WalletStatus)
 import { WalletStatus } from './components/WalletStatus';
+// --- Import the Particle Background component ---
+import { ParticleBackground } from './components/ParticleBackground'; // Ensure path is correct
 
+// --- Ensure this default export is correct ---
 export default function Home() {
+// -------------------------------------------
+
   // Use the specific accent color provided by the user
   const accentColor = '#FFAE00'; // User's Accent Color
 
   return (
-    // Remove outer bg-black/text-white - handled by layout body now
-    <div>
-      {/* Hero Section - Add container here for centering */}
+    // Outermost div from user's code #444
+    // Add relative positioning to allow z-index stacking if needed
+    <div className="relative">
+        {/* --- Add the Particle Background component here --- */}
+        {/* It positions itself fixed behind everything else */}
+        <ParticleBackground />
+        {/* ----------------------------------------------- */}
+
+      {/* Hero Section - Container from user's code #444 */}
+      {/* Added z-10 to ensure content is above background */}
       <div className="container mx-auto px-4 py-16 sm:py-24 relative z-10">
         <section className="text-center mb-16 sm:mb-24">
           {/* Logo */}
           <div className="flex justify-center mb-8">
-            {/* --- Updated with YOUR logo details --- */}
+            {/* --- Using YOUR logo details --- */}
             <Image
               src="/full-logo-black-bg-black-e.png" // YOUR logo filename
               alt="sendbox.fun logo"
               width={1736} // YOUR logo actual width
               height={1537} // YOUR logo actual height
               priority // Load logo quickly
-              // Add classes to control rendered size while maintaining aspect ratio
-              className="w-72 h-auto" // Example: Render at width 72 (288px), height auto
+              // Using YOUR rendered size class
+              className="w-72 h-auto"
             />
             {/* ------------------------------------ */}
           </div>
@@ -61,8 +73,9 @@ export default function Home() {
         </section>
       </div>
 
-      {/* Content Sections Grid - Add container here too */}
-      <div className="container mx-auto px-4 pb-16 sm:pb-24"> {/* Added bottom padding */}
+      {/* Content Sections Grid - Container from user's code #444 */}
+      {/* Added z-10 to ensure content is above background */}
+      <div className="container mx-auto px-4 pb-16 sm:pb-24 relative z-10">
         <section>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Card 1: Latest Thoughts */}
@@ -88,6 +101,6 @@ export default function Home() {
           </div>
         </section>
       </div>
-    </div>
+    </div> // Closing outermost div
   );
-}
+} // Closing function brace
