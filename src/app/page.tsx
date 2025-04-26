@@ -1,4 +1,4 @@
-// src/app/page.tsx (Adding Particle Background to User's Code #444)
+// src/app/page.tsx (Adding Yellow Borders and Hover Glow)
 'use client'; // Keep as client component because WalletStatus uses hooks
 
 import Link from 'next/link';
@@ -14,6 +14,7 @@ export default function Home() {
 
   // Use the specific accent color provided by the user
   const accentColor = '#FFAE00'; // User's Accent Color
+  const glowColorRgba = 'rgba(255, 174, 0, 0.5)'; // Matching glow color from other pages
 
   return (
     // Outermost div from user's code #444
@@ -62,7 +63,7 @@ export default function Home() {
               {/* Use updated accent color for primary button */}
               <Link href="/blog"
                     style={{ backgroundColor: accentColor }} // Apply updated accent color
-                    className={`inline-block hover:opacity-90 text-black font-semibold py-3 px-6 rounded-md shadow-md transition-opacity`}>
+                    className="inline-block hover:opacity-90 text-black font-semibold py-3 px-6 rounded-md shadow-md transition-all duration-300 hover:shadow-[0_0_8px_rgba(255,174,0,0.6)]">
                   Read the Blog
               </Link>
               <Link href="/projects"
@@ -78,8 +79,14 @@ export default function Home() {
       <div className="container mx-auto px-4 pb-16 sm:pb-24 relative z-10">
         <section>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Card 1: Latest Thoughts */}
-            <div className="bg-slate-900/50 backdrop-blur-sm p-6 rounded-lg shadow-lg border border-slate-700 flex flex-col hover:border-slate-500 transition-colors">
+            {/* Card 1: Latest Thoughts - Updated with yellow border and hover glow */}
+            <div className="bg-slate-900/50 backdrop-blur-sm p-6 rounded-lg shadow-lg 
+                            border border-[#FFAE00] 
+                            flex flex-col 
+                            transition-all duration-300 ease-in-out
+                            hover:shadow-[0_0_15px_3px_rgba(255,174,0,0.5)]
+                            hover:border-yellow-400
+                            hover:-translate-y-1">
               <h2 className="text-2xl font-semibold text-white mb-3">Latest Thoughts</h2>
               <p className="text-slate-300 mb-4 flex-grow">Dive into blog posts covering Solana development, web3 concepts, project ideas, and learning updates.</p>
                <Link href="/blog"
@@ -88,8 +95,14 @@ export default function Home() {
                  Go to Blog &rarr;
                </Link>
             </div>
-            {/* Card 2: Projects Showcase */}
-            <div className="bg-slate-900/50 backdrop-blur-sm p-6 rounded-lg shadow-lg border border-slate-700 flex flex-col hover:border-slate-500 transition-colors">
+            {/* Card 2: Projects Showcase - Updated with yellow border and hover glow */}
+            <div className="bg-slate-900/50 backdrop-blur-sm p-6 rounded-lg shadow-lg 
+                            border border-[#FFAE00] 
+                            flex flex-col 
+                            transition-all duration-300 ease-in-out
+                            hover:shadow-[0_0_15px_3px_rgba(255,174,0,0.5)]
+                            hover:border-yellow-400
+                            hover:-translate-y-1">
               <h2 className="text-2xl font-semibold text-white mb-3">Projects Showcase</h2>
                <p className="text-slate-300 mb-4 flex-grow">Explore the protocols and experiments being built here. Check out the code and concepts behind the work.</p>
                <Link href="/projects"

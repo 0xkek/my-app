@@ -1,4 +1,4 @@
-// src/app/blog/page.tsx (Tighter Hover Glow)
+// src/app/blog/page.tsx (Revised Hover Glow Implementation)
 
 // Keep as Server Component
 import Link from 'next/link';
@@ -11,9 +11,6 @@ export default function BlogIndexPage() {
   // Fetch data directly on the server
   const allPostsData: PostListData[] = getSortedPostsData();
   const accentColor = '#FFAE00'; // Your accent color hex
-  // Define the glow color using RGBA for transparency - used in hover shadow below
-  // Increased opacity slightly for more vibrance
-  const glowColorRgba = 'rgba(255, 174, 0, 0.7)'; // #FFAE00 at 70% opacity
 
   return (
     // Add relative positioning for z-index stacking
@@ -37,21 +34,18 @@ export default function BlogIndexPage() {
           {allPostsData.length > 0 ? (
             <ul className="space-y-6">
               {allPostsData.map(({ id, date, title, excerpt }) => (
-                // --- Tighter Hover Glow Effect ---
                 <li key={id}
-                    className={`
-                      bg-slate-900/50 backdrop-blur-sm rounded-lg shadow-lg
-                      border border-[#FFAE00]
-                      transition-all duration-300 ease-in-out
-                      hover:shadow-xl hover:-translate-y-1
-                      hover:shadow-[0_0_8px_3px_${glowColorRgba}] /* Reduced blur, small spread, increased opacity */
-                    `}
+                    className="bg-slate-900/50 backdrop-blur-sm rounded-lg shadow-lg
+                               border border-[#FFAE00]
+                               transition-all duration-300 ease-in-out
+                               hover:shadow-[0_0_15px_3px_rgba(255,174,0,0.5)]
+                               hover:border-yellow-400
+                               hover:-translate-y-1"
                 >
-                {/* ----------------------------- */}
                   <div className="p-6">
                     {/* Title */}
                     <Link href={`/blog/${id}`}>
-                      <h2 className={`text-2xl font-bold text-white mb-2 hover:text-[#FFAE00] transition-colors cursor-pointer`}>
+                      <h2 className="text-2xl font-bold text-white mb-2 hover:text-[#FFAE00] transition-colors cursor-pointer">
                         {title || "Untitled Post"}
                       </h2>
                     </Link>

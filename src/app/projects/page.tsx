@@ -1,4 +1,4 @@
-// src/app/projects/page.tsx (Uniform Border Thickness - FINAL)
+// src/app/projects/page.tsx (Enhanced Hover Glow Effect)
 'use client'; // Keep client if using hooks, can be server if just displaying static list
 
 import Link from 'next/link';
@@ -32,7 +32,7 @@ export default function ProjectsPage() {
   ];
 
   const accentColor = '#FFAE00'; // Your accent color
-  const glowColorRgba = 'rgba(255, 174, 0, 0.7)'; // Glow color
+  const glowColorRgba = 'rgba(255, 174, 0, 0.5)'; // Slightly softer glow color
 
   return (
     // Add relative positioning for z-index stacking
@@ -56,23 +56,20 @@ export default function ProjectsPage() {
 
           {/* Map over the projects array */}
           {projects.map((project) => (
-            // --- CORRECTED Border Classes ---
-            // Removed border-t-4 and the duplicate border-t-[#FFAE00]
             <div key={project.id}
                  className={`
                     bg-slate-900/50 backdrop-blur-sm rounded-lg shadow-lg
-                    border border-[#FFAE00] /* Correct: Single 1px yellow border */
+                    border border-[#FFAE00] /* Single 1px yellow border */
                     flex flex-col justify-between overflow-hidden
                     transition-all duration-300 ease-in-out
-                    hover:shadow-xl hover:-translate-y-1
-                    hover:shadow-[0_0_8px_3px_${glowColorRgba}] /* Keep yellow glow */
+                    hover:shadow-[0_0_15px_3px_rgba(255,174,0,0.5)] /* Enhanced glow effect */
+                    hover:border-yellow-400 /* Brighten border slightly on hover */
+                    hover:-translate-y-1 /* Keep the lift effect */
                  `}
             >
-            {/* ----------------------------- */}
-
               {/* Card Content Area */}
               <div className="p-6 flex flex-col flex-grow">
-                <h3 className="text-xl font-semibold text-white mb-2">
+                <h3 className="text-xl font-semibold text-white mb-2 transition-colors duration-300 group-hover:text-[#FFAE00]">
                   {project.title}
                 </h3>
                 <p className="text-slate-300 text-base mb-4 flex-grow">
@@ -83,7 +80,7 @@ export default function ProjectsPage() {
                 {project.tags && project.tags.length > 0 && (
                   <div className="flex flex-wrap gap-2 mb-4">
                     {project.tags.map(tag => (
-                      <span key={tag} className="bg-yellow-900/50 text-[#FFAE00] border border-[#FFAE00]/50 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                      <span key={tag} className="bg-yellow-900/50 text-[#FFAE00] border border-[#FFAE00]/50 text-xs font-medium px-2.5 py-0.5 rounded-full transition-colors duration-300 hover:bg-yellow-900/70 hover:border-[#FFAE00]/70">
                         {tag}
                       </span>
                     ))}
@@ -95,7 +92,7 @@ export default function ProjectsPage() {
               <div className="border-t border-slate-700 px-6 py-4 bg-slate-800/50 rounded-b-lg">
                  <Link href={project.href || '#'}
                        style={{ backgroundColor: accentColor }}
-                       className="inline-block hover:opacity-90 text-black text-sm font-semibold py-2 px-4 rounded shadow-sm transition-opacity">
+                       className="inline-block hover:opacity-90 text-black text-sm font-semibold py-2 px-4 rounded shadow-sm transition-all duration-300 hover:shadow-[0_0_8px_rgba(255,174,0,0.6)]">
                    {project.href === '#' || !project.href ? 'Coming Soon' : (project.href.startsWith('/blog/') ? 'Read Post' : 'Details')} &rarr;
                  </Link>
               </div>
