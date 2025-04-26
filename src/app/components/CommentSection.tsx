@@ -120,11 +120,11 @@ export function CommentSection({ postId }: CommentSectionProps) {
   // --- Full JSX Structure ---
   return (
     <div className="mt-12 pt-8 border-t border-slate-200 dark:border-slate-700">
-      <h2 className="text-2xl font-semibold mb-6 text-slate-800 dark:text-slate-200">Leave a Comment</h2>
+      <h2 className="text-2xl font-semibold mb-6 text-white">Leave a Comment</h2>
       {!connected ? (
          <div className="mb-8 p-4 flex flex-col items-center">
            <WalletMultiButtonDynamic style={{ height: '38px', fontSize: '14px' }} />
-           <p className="text-sm text-slate-500 dark:text-slate-400 mt-2"> Connect your wallet to leave a comment. </p>
+           <p className="text-sm text-white mt-2"> Connect your wallet to leave a comment. </p>
          </div>
        ) : publicKey ? (
          <form onSubmit={handleSubmit} className="mb-8">
@@ -141,7 +141,7 @@ export function CommentSection({ postId }: CommentSectionProps) {
          </form>
        ) : null }
 
-       <h3 className="text-xl font-semibold mb-4 text-slate-800 dark:text-slate-200">Comments ({isLoadingComments && comments.length === 0 ? '...' : totalCommentCount})</h3>
+       <h3 className="text-xl font-semibold mb-4 text-white">Comments ({isLoadingComments && comments.length === 0 ? '...' : totalCommentCount})</h3>
        <div className="space-y-4">
           {/* Initial Loading State */}
           {isLoadingComments && comments.length === 0 && <p className="text-slate-500 dark:text-slate-400 italic">Loading comments...</p>}
@@ -151,9 +151,9 @@ export function CommentSection({ postId }: CommentSectionProps) {
           {!loadingError && comments.map(comment => {
               // Use standard truncateAddress function
               return (
-                <div key={comment.id} className="p-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg shadow-sm">
-                  <p className="text-slate-800 dark:text-slate-200 mb-2 whitespace-pre-wrap">{comment.text}</p>
-                  <div className="flex justify-between items-center text-xs text-slate-500 dark:text-slate-400 border-t border-slate-100 dark:border-slate-700 pt-2 mt-2">
+                <div key={comment.id} className="p-4 border border-amber-400 rounded-lg bg-slate-900">
+                  <p className="text-white mb-2 whitespace-pre-wrap">{comment.text}</p>
+                  <div className="flex justify-between items-center text-xs text-slate-400 border-t border-slate-700 pt-2 mt-2">
                     <span className="font-mono break-all" title={comment.author}>By: {truncateAddress(comment.author)}</span>
                     <span className="whitespace-nowrap">{formatTimestamp(comment.timestamp)}</span>
                   </div>
@@ -172,7 +172,7 @@ export function CommentSection({ postId }: CommentSectionProps) {
             <button
               type="button"
               onClick={handleLoadMore} // Use the specific handler
-              className="text-blue-600 dark:text-blue-400 hover:underline disabled:opacity-50"
+              className="text-amber-500 hover:underline disabled:opacity-50"
               disabled={isLoadingMore} // Disable while loading more
             >
               Load More Comments
