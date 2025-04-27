@@ -1,4 +1,4 @@
-// src/components/CommentSection.tsx (FINAL - Fixing Syntax Errors)
+// src/components/CommentSection.tsx (Updating Disabled Button Style & Text)
 'use client';
 
 import React, { useState, useCallback, FormEvent, useEffect } from 'react';
@@ -34,9 +34,11 @@ export function CommentSection({ postId }: CommentSectionProps) {
   const [submitStatus, setSubmitStatus] = useState('');
   const [messageStatus, setMessageStatus] = useState<string>('');
 
-  // useEffect Hook for INITIAL comment load
-  // Depends ONLY on postId
+  // Note: accentColor variable removed as we use hex directly now
+
+  // useEffect Hook for INITIAL comment load (code unchanged, omitted for brevity)
   useEffect(() => {
+    // ... (initial comment loading logic remains the same)
     const fetchInitialComments = async () => {
       if (!postId) { setIsLoadingComments(false); return; }
       setIsLoadingComments(true); setLoadingError(null); setComments([]);
@@ -52,12 +54,11 @@ export function CommentSection({ postId }: CommentSectionProps) {
       finally { setIsLoadingComments(false); }
     };
     fetchInitialComments();
-  }, [postId]); // Only depends on postId
+  }, [postId]);
 
-
-  // handleLoadMore - Fetch next batch
-  // Wrapped in useCallback, depends on postId, comments, isLoadingMore, totalCommentCount, hasMore
+  // handleLoadMore - Fetch next batch (code unchanged, omitted for brevity)
   const handleLoadMore = useCallback(async () => {
+    // ... (load more logic remains the same)
       if (!postId || isLoadingMore || !hasMore) return;
       setIsLoadingMore(true); setLoadingError(null);
       const currentOffset = comments.length;
@@ -73,11 +74,11 @@ export function CommentSection({ postId }: CommentSectionProps) {
           console.log(`[CommentSection] handleLoadMore: Received ${fetchedComments.length}. Total loaded: ${newTotalLoaded}. Total available: ${totalCount}. HasMore: ${newTotalLoaded < totalCount}`);
       } catch (err) { console.error("[CommentSection] handleLoadMore: Error loading more comments:", err); setLoadingError('Failed to load more comments.'); }
       finally { setIsLoadingMore(false); }
-  }, [postId, comments, isLoadingMore, hasMore, totalCommentCount]); // Correct dependencies
+  }, [postId, comments, isLoadingMore, hasMore, totalCommentCount]);
 
-
-  // handleSubmit function
+  // handleSubmit function (code unchanged, omitted for brevity)
   const handleSubmit = useCallback(async (event: FormEvent) => {
+    // ... (submit logic remains the same)
     event.preventDefault();
     const trimmedComment = newComment.trim();
     if (!connected || !publicKey || !signMessage || !trimmedComment) { return; }
@@ -113,8 +114,7 @@ export function CommentSection({ postId }: CommentSectionProps) {
       setIsSubmitting(false);
       setTimeout(() => setSubmitStatus(''), 5000);
     }
-  // Ensure all dependencies are correct and syntax is valid
-  }, [connected, publicKey, signMessage, newComment, postId, comments.length, totalCommentCount]); // Removed loadComments dependency
+  }, [connected, publicKey, signMessage, newComment, postId, comments.length, totalCommentCount]);
 
 
   // --- Full JSX Structure ---
@@ -122,28 +122,52 @@ export function CommentSection({ postId }: CommentSectionProps) {
     <div className="mt-12 pt-8 border-t border-slate-200 dark:border-slate-700">
       <h2 className="text-2xl font-semibold mb-6 text-white">Leave a Comment</h2>
       {!connected ? (
-         <div className="mb-8 p-4 flex flex-col items-center">
-           <WalletMultiButtonDynamic style={{ height: '38px', fontSize: '14px' }} />
-           <p className="text-sm text-white mt-2"> Connect your wallet to leave a comment. </p>
-         </div>
-       ) : publicKey ? (
-         <form onSubmit={handleSubmit} className="mb-8">
+          <div className="mb-8 p-4 flex flex-col items-center">
+            {/* This button is styled via globals.css */}
+            <WalletMultiButtonDynamic style={{ height: '38px', fontSize: '14px' }} />
+            <p className="text-sm text-white mt-2"> Connect your wallet to leave a comment. </p>
+          </div>
+        ) : publicKey ? (
+          <form onSubmit={handleSubmit} className="mb-8">
             <label htmlFor="comment-textarea" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Your Comment (Signed):</label>
-            <textarea id="comment-textarea" value={newComment} onChange={(e) => setNewComment(e.target.value)} placeholder="Share your thoughts..." rows={4} required className="w-full p-3 border border-slate-300 dark:border-slate-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none dark:bg-slate-700 dark:text-slate-100 disabled:opacity-70" disabled={isSubmitting || !signMessage}/>
+            <textarea
+              id="comment-textarea"
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+              placeholder="Share your thoughts..."
+              rows={4}
+              required
+              className="w-full p-3 border border-slate-300 dark:border-slate-600 rounded-md focus:ring-2 focus:ring-[#FFAE00] dark:focus:border-[#FFAE00] focus:outline-none dark:bg-slate-700 dark:text-slate-100 disabled:opacity-70"
+              disabled={isSubmitting || !signMessage}
+            />
             {!signMessage && <p className="text-xs text-red-500 mt-1">Warning: Wallet may not support signing.</p>}
             <div className="flex justify-between items-center mt-3 gap-4">
               {submitStatus && <p className="text-xs text-slate-500 dark:text-slate-400 flex-grow text-left italic">{submitStatus}</p>}
-              <button type="submit" disabled={isSubmitting || !newComment.trim() || !signMessage} className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-500 text-white font-semibold py-2 px-5 rounded-md shadow transition-colors disabled:cursor-not-allowed">
-                {isSubmitting ? 'Posting...' : 'Post Comment'}
+              {/* --- UPDATED BUTTON DISABLED STYLE & TEXT LOGIC --- */}
+              <button
+                type="submit"
+                disabled={isSubmitting || !newComment.trim() || !signMessage} // Keep the original disabled conditions
+                className={`
+                  ${(isSubmitting || !newComment.trim() || !signMessage)
+                    ? 'bg-[#FFAE00]/50 text-black/70 cursor-not-allowed' // Disabled styles (faded yellow)
+                    : 'bg-[#FFAE00] hover:opacity-90 text-black hover:shadow-[0_0_8px_rgba(255,174,0,0.6)] cursor-pointer' // Enabled styles
+                  }
+                  font-semibold py-2 px-5 rounded-md shadow transition-all duration-300
+                `}
+              >
+                {/* Updated Text Logic */}
+                {isSubmitting ? 'Posting...' : (!newComment.trim() ? 'Write Comment' : 'Post Comment')}
               </button>
+              {/* --- END UPDATED BUTTON --- */}
             </div>
-             {messageStatus && ( <p className={`text-xs mt-2 text-orange-600 dark:text-orange-400 text-right`}> {messageStatus} </p> )}
-         </form>
-       ) : null }
+              {messageStatus && ( <p className={`text-xs mt-2 text-orange-600 dark:text-orange-400 text-right`}> {messageStatus} </p> )}
+          </form>
+        ) : null }
 
-       <h3 className="text-xl font-semibold mb-4 text-white">Comments ({isLoadingComments && comments.length === 0 ? '...' : totalCommentCount})</h3>
-       <div className="space-y-4">
-          {/* Initial Loading State */}
+        <h3 className="text-xl font-semibold mb-4 text-white">Comments ({isLoadingComments && comments.length === 0 ? '...' : totalCommentCount})</h3>
+        <div className="space-y-4">
+          {/* ... (Comment list rendering - already updated - code omitted for brevity) ... */}
+           {/* Initial Loading State */}
           {isLoadingComments && comments.length === 0 && <p className="text-slate-500 dark:text-slate-400 italic">Loading comments...</p>}
           {/* Loading Error State */}
           {loadingError && <p className="text-red-500 italic">{loadingError}</p>}
@@ -151,13 +175,15 @@ export function CommentSection({ postId }: CommentSectionProps) {
           {!loadingError && comments.map(comment => {
               // Use standard truncateAddress function
               return (
-                <div key={comment.id} className="p-4 border border-amber-400 rounded-lg bg-slate-900">
+                // --- UPDATED CLASSES FOR COMMENT BOX ---
+                <div key={comment.id} className="bg-gradient-to-br from-stone-800 via-stone-900 to-amber-950/80 backdrop-blur-sm p-4 rounded-lg shadow-lg border border-[#FFAE00] transition-all duration-300 ease-in-out hover:shadow-[0_0_15px_3px_rgba(255,174,0,0.5)] hover:border-yellow-400 hover:-translate-y-1">
                   <p className="text-white mb-2 whitespace-pre-wrap">{comment.text}</p>
                   <div className="flex justify-between items-center text-xs text-slate-400 border-t border-slate-700 pt-2 mt-2">
                     <span className="font-mono break-all" title={comment.author}>By: {truncateAddress(comment.author)}</span>
                     <span className="whitespace-nowrap">{formatTimestamp(comment.timestamp)}</span>
                   </div>
                 </div>
+                // --- END OF UPDATED CLASSES ---
               );
           })}
           {/* Empty State */}
@@ -182,8 +208,8 @@ export function CommentSection({ postId }: CommentSectionProps) {
         {/* Show separate indicator when loading MORE comments */}
         {isLoadingMore && <p className="text-slate-500 dark:text-slate-400 italic text-center mt-4">Loading more...</p>}
 
-         {/* Message Status Display (moved outside form) */}
-        {/* {messageStatus && ( <p className={`text-xs mt-4 ...`}> {messageStatus} </p> )} */}
+       {/* Message Status Display (moved outside form) */}
+      {/* {messageStatus && ( <p className={`text-xs mt-4 ...`}> {messageStatus} </p> )} */}
      </div>
   ); // Final closing brace and parenthesis for return
 } // Final closing brace for component function

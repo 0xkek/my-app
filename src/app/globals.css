@@ -24,61 +24,32 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
-/* --- Glitch Effect for Logo --- */
-.glitch-wrapper {
-  /* Ensures pseudo-elements are contained if needed */
-  /* background-color: transparent; /* Ensure wrapper itself is transparent */
+/* --- Styling for Solana WalletMultiButton --- */
+.wallet-adapter-button-trigger {
+  /* Your accent color */
+  background-color: #FFAE00 !important;
+  color: #000000 !important; /* Black text for contrast */
+  transition: all 0.3s ease !important;
+  border-radius: 0.375rem !important; /* Match Tailwind 'rounded-md' */
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1); /* Subtle shadow */
+  font-weight: 600 !important; /* Semibold */
+  line-height: 1.25rem; /* Adjust line height if needed */
+  padding-left: 1.25rem !important; /* Adjust padding */
+  padding-right: 1.25rem !important;
+  padding-top: 0.5rem !important; /* Adjust padding */
+  padding-bottom: 0.5rem !important;
 }
 
-.glitch-wrapper::before,
-.glitch-wrapper::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  /* Use the same logo image as the background */
-  /* MAKE SURE this path is correct relative to your public folder */
-  background: url('/e-logo-yellow-square-white-e.png') center center / cover no-repeat;
-  opacity: 0; /* Hidden by default */
-  z-index: 0; /* Position behind the main image */
-  /* Smooth transition for the effect */
-  transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.1s ease-out;
-  /* Mix blend mode for chromatic aberration feel */
-  mix-blend-mode: screen; /* Try 'screen', 'overlay', or 'difference' */
-  /* Inherit border radius from wrapper */
-  border-radius: inherit;
+/* Hover styles */
+.wallet-adapter-button-trigger:not([disabled]):hover {
+  opacity: 0.9 !important;
+  transform: scale(1.03) !important; /* Slight zoom effect */
+  box-shadow: 0 0 8px rgba(255, 174, 0, 0.6) !important; /* Glow effect */
 }
 
-/* Style the ::before pseudo-element on hover */
-.glitch-wrapper:hover::before {
-  /* Slight red tint overlay */
-  background-color: rgba(255, 0, 0, 0.1);
-  /* Offset slightly */
-  transform: translate(-3px, -2px) scale(1.01); /* scale adds a little zoom */
-  opacity: 0.6; /* Make it visible */
-}
+/* Optional: Style the dropdown menu if needed */
+/* .wallet-adapter-dropdown { ... } */
+/* .wallet-adapter-dropdown-list { ... } */
+/* .wallet-adapter-dropdown-list-item { ... } */
 
-/* Style the ::after pseudo-element on hover */
-.glitch-wrapper:hover::after {
-  /* Slight blue tint overlay */
-  background-color: rgba(0, 0, 255, 0.1);
-  /* Offset slightly in the opposite direction */
-  transform: translate(3px, 2px) scale(1.01); /* scale adds a little zoom */
-  opacity: 0.6; /* Make it visible */
-  /* Add a slight delay to the second layer */
-  transition-delay: 0.02s;
-}
-
-/* Optional: Slightly nudge the main image on hover too */
-.glitch-wrapper:hover > img {
-  transform: translate(1px, -1px);
-  transition: transform 0.1s ease-in-out;
-}
-
-/* Reset main image transform when not hovering */
-.glitch-wrapper > img {
-  transition: transform 0.1s ease-in-out;
-}
-/* --- End Glitch Effect --- */
+/* --- End WalletMultiButton Styling --- */
