@@ -1,86 +1,77 @@
-// src/app/page.tsx (Adding Yellow Borders and Hover Glow)
-'use client'; // Keep as client component because WalletStatus uses hooks
+// src/app/page.tsx (Without Footer)
+'use client';
 
 import Link from 'next/link';
-import Image from 'next/image'; // Import Image component
-// Import WalletStatus component (ensure path is correct: ./components/WalletStatus)
+import Image from 'next/image';
 import { WalletStatus } from './components/WalletStatus';
-// --- Import the Particle Background component ---
-import { ParticleBackground } from './components/ParticleBackground'; // Ensure path is correct
+import { ParticleBackground } from './components/ParticleBackground';
 
-// --- Ensure this default export is correct ---
 export default function Home() {
-// -------------------------------------------
-
-  // Use the specific accent color provided by the user
-  const accentColor = '#FFAE00'; // User's Accent Color
-  const glowColorRgba = 'rgba(255, 174, 0, 0.5)'; // Matching glow color from other pages
+  const accentColor = '#FFAE00';
 
   return (
-    // Outermost div from user's code #444
-    // Add relative positioning to allow z-index stacking if needed
     <div className="relative">
-        {/* --- Add the Particle Background component here --- */}
-        {/* It positions itself fixed behind everything else */}
         <ParticleBackground />
-        {/* ----------------------------------------------- */}
 
-      {/* Hero Section - Container from user's code #444 */}
-      {/* Added z-10 to ensure content is above background */}
-      <div className="container mx-auto px-4 py-16 sm:py-24 relative z-10">
-        <section className="text-center mb-16 sm:mb-24">
+      <div className="container mx-auto px-4 py-8 relative z-10">
+        <section className="text-center">
           {/* Logo */}
-          <div className="flex justify-center mb-8">
-            {/* --- Using YOUR logo details --- */}
+          <div className="flex justify-center mb-6">
             <Image
-              src="/full-logo-black-bg-black-e.png" // YOUR logo filename
+              src="/e-logo-yellow-square-white-e.png"
               alt="sendbox.fun logo"
-              width={1736} // YOUR logo actual width
-              height={1537} // YOUR logo actual height
-              priority // Load logo quickly
-              // Using YOUR rendered size class
-              className="w-72 h-auto"
+              width={150}
+              height={150}
+              priority
+              className="w-36 h-auto"
             />
-            {/* ------------------------------------ */}
           </div>
 
           {/* Tagline/Description */}
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 leading-tight text-white"> {/* Ensure text color */}
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 leading-tight text-white">
             Your Solana Dev Playground.
           </h1>
           <p className="text-lg sm:text-xl text-slate-300 max-w-3xl mx-auto mb-8">
             Experimenting with web3, smart contracts, and blockchain ideas. A space to build, learn, and share the journey.
           </p>
 
-          {/* Wallet Status */}
-          <div className="max-w-md mx-auto mb-10">
-             {/* Use existing WalletStatus component */}
-             <WalletStatus />
+          {/* Wallet Status - Yellow text for emphasis */}
+          <div className="max-w-md mx-auto">
+             <div className="border border-[#FFAE00] rounded-md overflow-hidden bg-gradient-to-br from-stone-800 via-stone-900 to-amber-950/80 backdrop-blur-sm">
+               <div className="p-3">
+                 <span className="text-[#FFAE00] font-medium">Please connect your wallet to interact with features.</span>
+               </div>
+             </div>
           </div>
+          
+          {/* SPACING - 14px (unchanged) */}
+          <div className="h-14"></div>
 
-          {/* Call-to-action Buttons */}
-          <div className="flex flex-wrap justify-center gap-4">
-              {/* Use updated accent color for primary button */}
+          {/* Call-to-action Buttons - INCREASED GAP between buttons */}
+          <div className="flex flex-wrap justify-center gap-8">
               <Link href="/blog"
-                    style={{ backgroundColor: accentColor }} // Apply updated accent color
-                    className="inline-block hover:opacity-90 text-black font-semibold py-3 px-6 rounded-md shadow-md transition-all duration-300 hover:shadow-[0_0_8px_rgba(255,174,0,0.6)]">
+                    style={{ backgroundColor: accentColor }}
+                    className="inline-block hover:opacity-90 hover:scale-105 text-black font-semibold py-3 px-5 rounded-md shadow-md transition-all duration-300 hover:shadow-[0_0_12px_rgba(255,174,0,0.7)]">
                   Read the Blog
               </Link>
               <Link href="/projects"
-                    className="inline-block bg-slate-700 hover:bg-slate-600 text-white font-semibold py-3 px-6 rounded-md shadow-md transition-colors">
+                    style={{ backgroundColor: accentColor }}
+                    className="inline-block hover:opacity-90 hover:scale-105 text-black font-semibold py-3 px-5 rounded-md shadow-md transition-all duration-300 hover:shadow-[0_0_12px_rgba(255,174,0,0.7)]">
                   View Projects
               </Link>
           </div>
+          
+          {/* REDUCED SPACING - 9px */}
+          <div className="h-9"></div>
         </section>
       </div>
 
-      {/* Content Sections Grid - Container from user's code #444 */}
-      {/* Added z-10 to ensure content is above background */}
-      <div className="container mx-auto px-4 pb-16 sm:pb-24 relative z-10">
+      {/* Content Sections Grid */}
+      <div className="container mx-auto px-4 pb-16 relative z-10">
         <section>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Card 1: Latest Thoughts - Updated with yellow border and hover glow */}
-            <div className="bg-slate-900/50 backdrop-blur-sm p-6 rounded-lg shadow-lg 
+            {/* Card 1: Latest Thoughts */}
+            <div className="bg-gradient-to-br from-stone-800 via-stone-900 to-amber-950/80 backdrop-blur-sm p-6 rounded-lg shadow-lg 
                             border border-[#FFAE00] 
                             flex flex-col 
                             transition-all duration-300 ease-in-out
@@ -90,13 +81,13 @@ export default function Home() {
               <h2 className="text-2xl font-semibold text-white mb-3">Latest Thoughts</h2>
               <p className="text-slate-300 mb-4 flex-grow">Dive into blog posts covering Solana development, web3 concepts, project ideas, and learning updates.</p>
                <Link href="/blog"
-                     style={{ color: accentColor }} // Use updated accent color for link
-                     className="hover:underline font-medium self-start mt-auto">
+                     style={{ color: accentColor }}
+                     className="hover:underline hover:text-yellow-400 font-medium self-start mt-auto transition-colors">
                  Go to Blog &rarr;
                </Link>
             </div>
-            {/* Card 2: Projects Showcase - Updated with yellow border and hover glow */}
-            <div className="bg-slate-900/50 backdrop-blur-sm p-6 rounded-lg shadow-lg 
+            {/* Card 2: Projects Showcase */}
+            <div className="bg-gradient-to-br from-stone-800 via-stone-900 to-amber-950/80 backdrop-blur-sm p-6 rounded-lg shadow-lg 
                             border border-[#FFAE00] 
                             flex flex-col 
                             transition-all duration-300 ease-in-out
@@ -106,14 +97,14 @@ export default function Home() {
               <h2 className="text-2xl font-semibold text-white mb-3">Projects Showcase</h2>
                <p className="text-slate-300 mb-4 flex-grow">Explore the protocols and experiments being built here. Check out the code and concepts behind the work.</p>
                <Link href="/projects"
-                     style={{ color: accentColor }} // Use updated accent color for link
-                     className="hover:underline font-medium self-start mt-auto">
+                     style={{ color: accentColor }}
+                     className="hover:underline hover:text-yellow-400 font-medium self-start mt-auto transition-colors">
                  View Projects &rarr;
                </Link>
             </div>
           </div>
         </section>
       </div>
-    </div> // Closing outermost div
+    </div>
   );
-} // Closing function brace
+}

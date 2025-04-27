@@ -1,4 +1,4 @@
-// src/app/blog/page.tsx (Revised Hover Glow Implementation)
+// src/app/blog/page.tsx (Revised Hover Glow & Background Implementation)
 
 // Keep as Server Component
 import Link from 'next/link';
@@ -35,7 +35,8 @@ export default function BlogIndexPage() {
             <ul className="space-y-6">
               {allPostsData.map(({ id, date, title, excerpt }) => (
                 <li key={id}
-                    className="bg-slate-900/50 backdrop-blur-sm rounded-lg shadow-lg
+                    // UPDATED BACKGROUND CLASS HERE:
+                    className="bg-gradient-to-br from-stone-800 via-stone-900 to-amber-950/80 backdrop-blur-sm rounded-lg shadow-lg
                                border border-[#FFAE00]
                                transition-all duration-300 ease-in-out
                                hover:shadow-[0_0_15px_3px_rgba(255,174,0,0.5)]

@@ -1,4 +1,4 @@
-// src/app/projects/page.tsx (Enhanced Hover Glow Effect)
+// src/app/projects/page.tsx (Applying Consistent Background & Hover Glow Effect)
 'use client'; // Keep client if using hooks, can be server if just displaying static list
 
 import Link from 'next/link';
@@ -32,7 +32,7 @@ export default function ProjectsPage() {
   ];
 
   const accentColor = '#FFAE00'; // Your accent color
-  const glowColorRgba = 'rgba(255, 174, 0, 0.5)'; // Slightly softer glow color
+  const glowColorRgba = 'rgba(255, 174, 0, 0.5)'; // Slightly softer glow color (Note: This variable isn't used in the current Tailwind hover class, but kept for reference)
 
   return (
     // Add relative positioning for z-index stacking
@@ -58,7 +58,7 @@ export default function ProjectsPage() {
           {projects.map((project) => (
             <div key={project.id}
                  className={`
-                    bg-slate-900/50 backdrop-blur-sm rounded-lg shadow-lg
+                    bg-gradient-to-br from-stone-800 via-stone-900 to-amber-950/80 backdrop-blur-sm rounded-lg shadow-lg  /* UPDATED BACKGROUND */
                     border border-[#FFAE00] /* Single 1px yellow border */
                     flex flex-col justify-between overflow-hidden
                     transition-all duration-300 ease-in-out
@@ -90,20 +90,20 @@ export default function ProjectsPage() {
 
               {/* Card Footer Area (Button) */}
               <div className="border-t border-slate-700 px-6 py-4 bg-slate-800/50 rounded-b-lg">
-                 <Link href={project.href || '#'}
-                       style={{ backgroundColor: accentColor }}
-                       className="inline-block hover:opacity-90 text-black text-sm font-semibold py-2 px-4 rounded shadow-sm transition-all duration-300 hover:shadow-[0_0_8px_rgba(255,174,0,0.6)]">
-                   {project.href === '#' || !project.href ? 'Coming Soon' : (project.href.startsWith('/blog/') ? 'Read Post' : 'Details')} &rarr;
-                 </Link>
+                   <Link href={project.href || '#'}
+                         style={{ backgroundColor: accentColor }}
+                         className="inline-block hover:opacity-90 text-black text-sm font-semibold py-2 px-4 rounded shadow-sm transition-all duration-300 hover:shadow-[0_0_8px_rgba(255,174,0,0.6)]">
+                     {project.href === '#' || !project.href ? 'Coming Soon' : (project.href.startsWith('/blog/') ? 'Read Post' : 'Details')} &rarr;
+                   </Link>
               </div>
             </div>
           ))}
 
           {/* Message if no projects listed */}
           {projects.length === 0 && (
-             <p className="italic text-slate-500 md:col-span-2 lg:col-span-3 text-center">
-               No projects listed yet. Check back soon!
-             </p>
+              <p className="italic text-slate-500 md:col-span-2 lg:col-span-3 text-center">
+                No projects listed yet. Check back soon!
+              </p>
           )}
         </div>
       </div>

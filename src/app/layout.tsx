@@ -1,4 +1,4 @@
-// src/app/layout.tsx (Full Dark Theme Base - Corrected)
+// src/app/layout.tsx (Reduced Footer Height)
 import type { Metadata } from "next";
 import { Outfit } from "next/font/google"; // Using Outfit font
 import "./globals.css"; // Ensure Tailwind base styles are included
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   title: "sendbox.fun",
   description: "Exploring Solana ideas and projects",
   // Use the correct logo filename relative to /public
-  icons: { icon: '/full-logo-black-bg-black-e.png' }
+  icons: { icon: '/e-logo-yellow-square-white-e.png' }
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode; }>) {
@@ -20,18 +20,27 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     // Ensure html tag takes full height for background to apply
     <html lang="en" className="h-full">
       {/* Apply dark theme base directly to body */}
-      {/* Added !important prefixes as a fallback if overrides occur, though usually not needed */}
-      <body className={`${outfit.className} flex flex-col min-h-screen !bg-black !text-slate-300 text-lg`}>
+      <body className={`${outfit.className} flex flex-col min-h-screen !bg-neutral-900 !text-slate-200 text-lg`}>
         <Providers>
           <SiteHeader />
           {/* Main content area grows to fill space */}
           <main className="flex-grow">
             {children} {/* Pages will handle their own containers/padding */}
           </main>
-          {/* Footer styling adjusted for dark theme */}
-          <footer className="w-full mt-auto py-4 text-center text-sm text-slate-500 border-t border-slate-800 bg-gray-950"> {/* Darker footer bg/border */}
-            © {currentYear} sendbox.fun | Made with Next.js
+
+          {/* --- Footer with Reduced Padding/Margin --- */}
+          <footer className="w-full mt-auto py-2 bg-gradient-to-r from-[#452a05] to-stone-900 border-t border-[#FFAE00]/30 text-center text-sm text-slate-400"> {/* Changed py-4 to py-2 */}
+            <div className="container mx-auto px-4">
+              <p>© {currentYear} sendbox.fun | Made with Next.js</p>
+              {/* Changed mt-2 to mt-1 */}
+              <div className="mt-1">
+                <a href="#" className="text-[#FFAE00]/80 hover:text-[#FFAE00] mx-2 transition-colors">Terms</a>
+                <a href="#" className="text-[#FFAE00]/80 hover:text-[#FFAE00] mx-2 transition-colors">Privacy</a>
+              </div>
+            </div>
           </footer>
+          {/* --- End Footer --- */}
+
         </Providers>
       </body>
     </html>
