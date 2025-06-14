@@ -1,4 +1,4 @@
-// src/app/page.tsx (Without Footer)
+// src/app/page.tsx
 'use client';
 
 import Link from 'next/link';
@@ -47,7 +47,7 @@ export default function Home() {
           {/* SPACING - 14px (unchanged) */}
           <div className="h-14"></div>
 
-          {/* Call-to-action Buttons - INCREASED GAP between buttons */}
+          {/* Call-to-action Buttons - Added NFT Generator Button */}
           <div className="flex flex-wrap justify-center gap-8">
               <Link href="/blog"
                     style={{ backgroundColor: accentColor }}
@@ -58,6 +58,12 @@ export default function Home() {
                     style={{ backgroundColor: accentColor }}
                     className="inline-block hover:opacity-90 hover:scale-105 text-black font-semibold py-3 px-5 rounded-md shadow-md transition-all duration-300 hover:shadow-[0_0_12px_rgba(255,174,0,0.7)]">
                   View Projects
+              </Link>
+              {/* --- New Button Added Here --- */}
+              <Link href="/generate"
+                    style={{ backgroundColor: accentColor }}
+                    className="inline-block hover:opacity-90 hover:scale-105 text-black font-semibold py-3 px-5 rounded-md shadow-md transition-all duration-300 hover:shadow-[0_0_12px_rgba(255,174,0,0.7)]">
+                  NFT Generator
               </Link>
           </div>
           
